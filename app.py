@@ -70,7 +70,7 @@ else:
     You also found a few rocks that seem to have wet soil around them. They might be hiding something useful.
     """)
 
-    col1, col2, col3 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     
     with col1:
         if st.button("Search the rocks"):
@@ -90,4 +90,4 @@ else:
 
     with col3:
         if st.button("Walk south"):
-            st.write("Walking towards the lake....")
+            st.write("Walking towards the lake in the distance.....")
