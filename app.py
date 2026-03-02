@@ -9,6 +9,9 @@ if "game_started" not in st.session_state:
     st.session_state.game_started = False
 if "inventory" not in st.session_state:
     st.session_state.inventory = {}
+# NEW: Track where the player is in the world
+if "location" not in st.session_state:
+    st.session_state.location = "Plains"
 
 # --- LOGIN DIALOG ---
 @st.dialog("Login to TheGame")
@@ -39,9 +42,10 @@ if st.session_state.logged_in:
         elif menu_choice == "Quit":
             st.warning("Are you sure you want to exit?")
             if st.button("Quit Game"):
-                # Complete reset of the session state to go back to the start
                 st.session_state.logged_in = False
                 st.session_state.game_started = False
+                st.session_state.location = "Plains" # Reset location on quit
+                st.session_state.inventory = {} # Clears inventory on quit
                 st.rerun()
 
 # --- MAIN SCREEN LOGIC ---
@@ -56,9 +60,9 @@ elif not st.session_state.game_started:
         st.session_state.game_started = True
         st.rerun()
 
-else:
+# --- VAST PLAINS ---
+elif st.session_state.location == "Plains":
     st.title("🌾 Vast Plains")
-    # Using your existing landscape placeholder
     st.image("https://via.placeholder.com/800x400.png?text=Vast+Plains+Landscape") 
     
     st.write("""
@@ -90,4 +94,69 @@ else:
 
     with col3:
         if st.button("Walk south"):
-            st.write("Walking towards the lake in the distance.....")
+            with st.spinner("Walking towards the lake in the distance..."):
+                time.sleep(2)
+            # Change location and rerun to load the Lake screen
+            st.session_state.location = "Lake"
+            st.rerun()
+
+# --- LAKESIDE ---
+elif st.session_state.location == "Lake":
+    st.title("🌊 Lake Side")
+    
+    st.image("https://via.placeholder.com/800x400.png?text=Peaceful+Lakeside")
+    
+    st.write("""
+    You arrived at the lake. The air is filled with the crisp scent of water mingled with the earthy aroma of nearby foliage. 
+    The gentle ripples of the water create a soothing melody, punctuated by the occasional call of distant birds.
+    
+    You gaze at the waters and see small fishes swimming around.
+    """)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("Start Fishing"):
+            has_worms = st.session_state.inventory.get("Worms", 0) > 0
+            
+            # 1. Check for bait and set the message/deduct inventory
+            if has_worms:
+                msg = "Fishing for fish.........."
+                st.session_state.inventory["Worms"] -= 1
+                if st.session_state.inventory["Worms"] == 0:
+                    del st.session_state.inventory["Worms"] # Clean up empty item
+            else:
+                msg = "Fishing without bait seems kinda silly.... but let's try anyway."
+            
+            # 2. The Fishing Sequence
+            with st.spinner(msg):
+                time.sleep(2)
+            
+            st.toast("You felt a tug!!")
+            time.sleep(1)
+            
+            # 3. Probability Check (Replicating your JS logic)
+            catch_chance = random.randint(1, 300) if has_worms else random.randint(1, 100)
+            
+            if catch_chance > 295: catch = "Huge Bass"
+            elif catch_chance > 290: catch = "Cat-fish"
+            elif catch_chance > 280: catch = "Bass"
+            elif catch_chance > 260: catch = "Trout"
+            elif catch_chance > 240: catch = "Perch"
+            elif catch_chance > 220: catch = "Carp"
+            elif catch_chance > 210: catch = "Rare Golden Fish"
+            else: catch = None
+            
+            # 4. Result
+            if catch:
+                st.session_state.inventory[catch] = st.session_state.inventory.get(catch, 0) + 1
+                st.success(f"You caught a {catch}! Enjoy your catch.")
+            else:
+                st.warning("You actually just caught a worthless kelp that got dragged by the current, you threw it away...")
+
+    with col2:
+        if st.button("Walk Back to the Plains"):
+            with st.spinner("Heading back to the plains..."):
+                time.sleep(1.5)
+            st.session_state.location = "Plains"
+            st.rerun()
