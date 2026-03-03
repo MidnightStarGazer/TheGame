@@ -155,11 +155,19 @@ elif st.session_state.location == "Plains":
             st.session_state.location = "Lake"
             st.rerun()
 
-# --- LAKESIDE --- 
+## --- LAKESIDE --- (based on your old html design)
 elif st.session_state.location == "Lake":
     st.title("🌊 Lake Side")
+    
     st.image("https://via.placeholder.com/800x400.png?text=Peaceful+Lakeside")
-    st.write("You arrived at the lake. You gaze at the waters and see small fishes swimming around.")
+    
+    st.write("""
+    You arrived at the lake. The air is filled with the crisp scent of water mingled with the earthy aroma of nearby foliage. 
+    The gentle ripples of the water create a soothing melody, punctuated by the occasional call of distant birds.
+    
+    You gaze at the waters and see small fishes swimming around.
+    """)
+    
     
     col1, col2 = st.columns(2)
     
