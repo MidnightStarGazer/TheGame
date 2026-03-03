@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import time
+from logic.state import save_game
 
 def show_plains():
     st.title("🌾 Vast Plains")
@@ -26,6 +27,7 @@ def show_plains():
                 worms = random.randint(1, 5)
                 st.session_state.inventory["Worms"] = st.session_state.inventory.get("Worms", 0) + worms
                 st.success(f"You found {worms} worms!")
+                save_game()
             else:
                 st.info("You didn't find anything.")
                 
@@ -48,6 +50,7 @@ def show_plains():
                 
                 time.sleep(5)
             st.session_state.location = "Village"
+            save_game()
             st.rerun()
 
     with col3:
@@ -55,4 +58,5 @@ def show_plains():
             with st.spinner("Walking towards the lake in the distance..."):
                 time.sleep(2)
             st.session_state.location = "Lake"
+            save_game()
             st.rerun()

@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import time
+from logic.state import save_game
 
 def show_village():
     st.title("🏘️ Village")
@@ -16,6 +17,7 @@ def show_village():
     with col1:
         if st.button("Go to Fishmonger's House"):
             st.session_state.location = "Fishmonger"
+            save_game()
             st.rerun()
             
     with col2:
@@ -34,4 +36,5 @@ def show_village():
                 time.sleep(3) 
             
             st.session_state.location = "Plains"
+            save_game()
             st.rerun()

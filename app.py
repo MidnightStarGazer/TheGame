@@ -1,5 +1,5 @@
 import streamlit as st
-from logic.state import init_session_state
+from logic.state import init_session_state, save_game, reset_game
 from areas.plains import show_plains
 from areas.lake import show_lake
 from areas.village import show_village
@@ -33,11 +33,16 @@ if st.session_state.logged_in:
             else:
                 for item, count in st.session_state.inventory.items():
                     st.write(f"**{item}**: {count}")
+            
+            # Dedicated Save Button inside Inventory
+            if st.button("💾 Save Progress"):
+                save_game()
+                st.toast("Progress Saved!", icon="💾")
 
         elif menu_choice == "Quit":
-            st.warning("Are you sure you want to exit?")
-            if st.button("Quit Game"):
-                st.session_state.clear() # Quick way to reset everything!
+            st.warning("Logout of the session?")
+            if st.button("Logout"):
+                st.session_state.logged_in = False # Log out without deleting save
                 st.rerun()
 
 # --- MAIN ROUTING LOGIC ---
@@ -48,17 +53,18 @@ if not st.session_state.logged_in:
 
 elif not st.session_state.game_started:
     st.markdown("<h1 style='text-align: center;'>WELCOME TO THE GAME</h1>", unsafe_allow_html=True)
-    if st.button("START ->"):
-        st.session_state.game_started = True
-        st.rerun()
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("START GAME ->", use_container_width=True):
+            st.session_state.game_started = True
+            st.rerun()
+    with col2:
+        if st.button("NEW GAME", use_container_width=True, type="primary"):
+            reset_game() # Clears file and memory
 
 else:
-    # This is the magic part that connects your files!
-    if st.session_state.location == "Plains":
-        show_plains()
-    elif st.session_state.location == "Lake":
-        show_lake()
-    elif st.session_state.location == "Village":
-        show_village()
-    elif st.session_state.location == "Fishmonger":
-        show_fishmonger()
+    # Navigation logic
+    if st.session_state.location == "Plains": show_plains()
+    elif st.session_state.location == "Lake": show_lake()
+    elif st.session_state.location == "Village": show_village()
+    elif st.session_state.location == "Fishmonger": show_fishmonger()
