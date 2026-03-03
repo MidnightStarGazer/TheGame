@@ -132,7 +132,7 @@ def show_lake():
             elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: reaction_limit = 2
             else: reaction_limit = 2.5
 
-            st.info(f"The fish pulls **{st.session_state.fish_dir}**!")
+            st.info(f"The fish went.. **{st.session_state.fish_dir}**!")
             
             def advance_battle():
                 if st.session_state.fish_hp <= 0:
@@ -141,14 +141,14 @@ def show_lake():
                 elif st.session_state.player_hp <= 0:
                     st.session_state.fishing_step = "lost"
                 else:
-                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "DIVING DOWN"])
+                    st.session_state.fish_dir = random.choice(["LEFT!", "RIGHT!", "DIVING DOWN!"])
                     st.session_state.move_start_time = time.time()
 
             b_col1, b_col2, b_col3 = st.columns(3)
             btn_clicked = False
             
             if b_col1.button("Pull LEFT", key="pull_l"):
-                if st.session_state.fish_dir == "RIGHT":
+                if st.session_state.fish_dir == "RIGHT!":
                     st.session_state.fish_hp -= 2
                     st.toast("Great reflex!", icon="✅")
                 else:
@@ -157,7 +157,7 @@ def show_lake():
                 btn_clicked = True
 
             if b_col2.button("Pull UP", key="pull_u"):
-                if st.session_state.fish_dir == "DIVING DOWN":
+                if st.session_state.fish_dir == "DIVING DOWN!":
                     st.session_state.fish_hp -= 2
                     st.toast("Great reflex!", icon="✅")
                 else:
@@ -166,7 +166,7 @@ def show_lake():
                 btn_clicked = True
 
             if b_col3.button("Pull RIGHT", key="pull_r"):
-                if st.session_state.fish_dir == "LEFT":
+                if st.session_state.fish_dir == "LEFT!":
                     st.session_state.fish_hp -= 2
                     st.toast("Great reflex!", icon="✅")
                 else:
