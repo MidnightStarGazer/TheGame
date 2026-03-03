@@ -12,6 +12,18 @@ if "inventory" not in st.session_state:
 # NEW: Track where the player is in the world
 if "location" not in st.session_state:
     st.session_state.location = "Plains"
+if "fishing_step" not in st.session_state:
+    st.session_state.fishing_step = "idle"
+if "player_hp" not in st.session_state:
+    st.session_state.player_hp = 10
+if "fish_hp" not in st.session_state:
+    st.session_state.fish_hp = 10
+if "current_fish" not in st.session_state:
+    st.session_state.current_fish = ""
+if "fish_dir" not in st.session_state:
+    st.session_state.fish_dir = "LEFT"
+if "splash_start_time" not in st.session_state:
+    st.session_state.splash_start_time = 0
 
 # --- LOGIN DIALOG ---
 @st.dialog("Login to TheGame")
@@ -72,6 +84,7 @@ if st.session_state.logged_in:
                 st.session_state.game_started = False
                 st.session_state.location = "Plains" # Reset location on quit
                 st.session_state.inventory = {} # Clears inventory on quit
+                st.session_state.fishing_step = "idle"
                 st.rerun()
 
 # --- MAIN SCREEN LOGIC ---
@@ -146,50 +159,135 @@ elif st.session_state.location == "Lake":
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("Start Fishing"):
-            has_worms = st.session_state.inventory.get("Worms", 0) > 0
+        if st.session_state.fishing_step == "idle":
+            if st.button("Start Fishing"):
+                has_worms = st.session_state.inventory.get("Worms", 0) > 0
+                
+                if has_worms:
+                    st.session_state.inventory["Worms"] -= 1
+                    if st.session_state.inventory["Worms"] == 0:
+                        del st.session_state.inventory["Worms"] # Clean up empty item
+                    
+                    catch_chance = random.randint(1, 400)
+                    
+                    if catch_chance == 400: catch = "Rare Golden Fish"
+                    elif catch_chance > 393: catch = "Huge Bass"
+                    elif catch_chance > 386: catch = "Cat-fish"
+                    elif catch_chance > 374: catch = "Bass"
+                    elif catch_chance > 340: catch = "Trout"
+                    elif catch_chance > 290: catch = "Perch"
+                    elif catch_chance > 220: catch = "Carp"
+                    else: catch = None
+                    
+                    st.session_state.current_fish = catch
+                    st.session_state.fishing_step = "fake_splash"
+                    st.rerun()
+                else:
+                    st.warning("Fishing without bait seems kinda silly.... you need Worms.")
+        
+        elif st.session_state.fishing_step == "fake_splash":
+            st.write("Fishing for fish..........")
+            st.write("Bubble... Bubble...") 
+            st.info("!!splash!!")
+            sub1, sub2 = st.columns(2)
+            if sub1.button("Reel In!"):
+                st.toast("You pulled too early! The fish got scared away.", icon="❌")
+                st.session_state.fishing_step = "idle"
+                time.sleep(1.5)
+                st.rerun()
+            if sub2.button("Wait..."):
+                st.session_state.fishing_step = "real_splash"
+                st.session_state.splash_start_time = time.time()
+                st.rerun()
+                
+        elif st.session_state.fishing_step == "real_splash":
+            st.error("!!SPLASH!!")
+            if st.button("Reel In!"):
+                if time.time() - st.session_state.splash_start_time > 1.0:
+                    st.toast("Too late! You lost the worm and the fish.", icon="❌")
+                    st.session_state.fishing_step = "idle"
+                    time.sleep(1.5)
+                    st.rerun()
+                else:
+                    if st.session_state.current_fish:
+                        st.session_state.fishing_step = "battle_intro"
+                        
+                        if st.session_state.current_fish in ["Trout", "Perch", "Carp"]:
+                            st.session_state.fish_hp = 10
+                        elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]:
+                            st.session_state.fish_hp = 15
+                        elif st.session_state.current_fish == "Rare Golden Fish":
+                            st.session_state.fish_hp = 20
+                            
+                        st.session_state.player_hp = 10
+                        st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
+                        st.rerun()
+                    else:
+                        st.toast("You actually just caught a worthless kelp... you threw it away.", icon="🌿")
+                        st.session_state.fishing_step = "idle"
+                        time.sleep(2)
+                        st.rerun()
+                        
+        elif st.session_state.fishing_step == "battle_intro":
+            st.success(f"is that?.... a {st.session_state.current_fish}")
+            if st.button("Start Battle!"):
+                st.session_state.fishing_step = "battle"
+                st.rerun()
+                
+        elif st.session_state.fishing_step == "battle":
+            st.subheader(f"Fighting: {st.session_state.current_fish}")
             
-            # 1. Check for bait and set the message/deduct inventory
-            if has_worms:
-                msg = "Fishing for fish.........."
-                st.session_state.inventory["Worms"] -= 1
-                if st.session_state.inventory["Worms"] == 0:
-                    del st.session_state.inventory["Worms"] # Clean up empty item
-            else:
-                msg = "Fishing without bait seems kinda silly.... but let's try anyway."
+            hp_col1, hp_col2 = st.columns(2)
+            hp_col1.metric("Your HP", st.session_state.player_hp)
+            hp_col2.metric("Fish HP", st.session_state.fish_hp)
             
-            # 2. The Fishing Sequence
-            with st.spinner(msg):
-                time.sleep(2)
+            st.info(f"The fish pulls **{st.session_state.fish_dir}**!")
             
-            st.toast("You felt a tug!!")
-            time.sleep(1)
+            b_col1, b_col2, b_col3 = st.columns(3)
             
-            # 3. Probability Check (Replicating your JS logic based on your old html design)
-            catch_chance = random.randint(1, 300) if has_worms else random.randint(1, 100)
-            
-            if catch_chance > 295: catch = "Huge Bass"
-            elif catch_chance > 290: catch = "Cat-fish"
-            elif catch_chance > 280: catch = "Bass"
-            elif catch_chance > 260: catch = "Trout"
-            elif catch_chance > 240: catch = "Perch"
-            elif catch_chance > 220: catch = "Carp"
-            elif catch_chance > 210: catch = "Rare Golden Fish"
-            else: catch = None
-            
-            # 4. Result
-            if catch:
-                st.session_state.inventory[catch] = st.session_state.inventory.get(catch, 0) + 1
-                st.success(f"You caught a {catch}! Enjoy your catch.")
-            else:
-                st.warning("You actually just caught a worthless kelp that got dragged by the current, you threw it away...")
+            def execute_pull(direction):
+                if direction == st.session_state.fish_dir:
+                    st.session_state.fish_hp -= 2
+                else:
+                    st.session_state.player_hp -= 2
+                    
+                if st.session_state.fish_hp <= 0:
+                    st.session_state.inventory[st.session_state.current_fish] = st.session_state.inventory.get(st.session_state.current_fish, 0) + 1
+                    st.session_state.fishing_step = "won"
+                elif st.session_state.player_hp <= 0:
+                    st.session_state.fishing_step = "lost"
+                else:
+                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
+                    
+            if b_col1.button("Pull LEFT"):
+                execute_pull("LEFT")
+                st.rerun()
+            if b_col2.button("Pull UP"):
+                execute_pull("UP")
+                st.rerun()
+            if b_col3.button("Pull RIGHT"):
+                execute_pull("RIGHT")
+                st.rerun()
+                
+        elif st.session_state.fishing_step == "won":
+            st.success(f"You caught a {st.session_state.current_fish}! Enjoy your catch.")
+            if st.button("Continue Fishing"):
+                st.session_state.fishing_step = "idle"
+                st.rerun()
+                
+        elif st.session_state.fishing_step == "lost":
+            st.error("The line snapped! The fish got away.")
+            if st.button("Continue Fishing"):
+                st.session_state.fishing_step = "idle"
+                st.rerun()
 
     with col2:
-        if st.button("Walk Back to the Plains"):
-            with st.spinner("Heading back to the plains..."):
-                time.sleep(1.5)
-            st.session_state.location = "Plains"
-            st.rerun()
+        if st.session_state.fishing_step == "idle":
+            if st.button("Walk Back to the Plains"):
+                with st.spinner("Heading back to the plains..."):
+                    time.sleep(1.5)
+                st.session_state.location = "Plains"
+                st.rerun()
 
 # --- VILLAGE --- (based on your old html design)
 elif st.session_state.location == "Village":
@@ -255,8 +353,8 @@ elif st.session_state.location == "Fishmonger":
         if st.button("Sell Fish"):
             # Selling logic
             fish_prices = {
-                "Trout": 10, "Perch": 15, "Carp": 20, 
-                "Bass": 25, "Cat-fish": 50, "Huge Bass": 100, "Rare Golden Fish": 500
+                "Trout": 5, "Perch": 8, "Carp": 10, 
+                "Bass": 20, "Cat-fish": 30, "Huge Bass": 55, "Rare Golden Fish": 500
             }
             
             # The custom dialogue for each fish type
