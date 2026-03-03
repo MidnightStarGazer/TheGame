@@ -88,7 +88,7 @@ def show_lake():
                     # HP Settings
                     if st.session_state.current_fish in ["Trout", "Perch", "Carp"]: st.session_state.fish_hp = 10
                     elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: st.session_state.fish_hp = 15
-                    elif st.session_state.current_fish == "Rare Golden Fish": st.session_state.fish_hp = 20
+                    elif st.session_state.current_fish == "Rare Golden Fish": st.session_state.fish_hp = 30
                     st.session_state.player_hp = 10
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
                 else:
@@ -124,10 +124,10 @@ def show_lake():
             hp_col1.metric("Your HP", st.session_state.player_hp)
             hp_col2.metric("Fish HP", st.session_state.fish_hp)
             
-            # Difficulty base sa fesh
-            if st.session_state.current_fish == "Rare Golden Fish": reaction_limit = 1
-            elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: reaction_limit = 1.5
-            else: reaction_limit = 1.8
+            # Difficulty base sa fesh 
+            if st.session_state.current_fish == "Rare Golden Fish": reaction_limit = 2
+            elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: reaction_limit = 2
+            else: reaction_limit = 2.5
 
             st.info(f"The fish pulls **{st.session_state.fish_dir}**!")
             

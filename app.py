@@ -24,7 +24,8 @@ def login_dialog():
 if st.session_state.logged_in:
     with st.sidebar:
         st.title("⚙️ Game Menu")
-        menu_choice = st.radio("Navigation", ["Inventory", "Quit"])
+        # Here is your new 3-option menu
+        menu_choice = st.radio("Navigation", ["Inventory", "Quit to Menu", "Logout"])
         
         if menu_choice == "Inventory":
             st.subheader("🎒 Your Items")
@@ -34,15 +35,22 @@ if st.session_state.logged_in:
                 for item, count in st.session_state.inventory.items():
                     st.write(f"**{item}**: {count}")
             
-            # Dedicated Save Button inside Inventory
             if st.button("💾 Save Progress"):
                 save_game()
                 st.toast("Progress Saved!", icon="💾")
 
-        elif menu_choice == "Quit":
-            st.warning("Logout of the session?")
-            if st.button("Logout"):
+        elif menu_choice == "Quit to Menu":
+            st.warning("Return to the Start screen?")
+            if st.button("Confirm Quit"):
+                # This just toggles the screen, doesn't log you out
+                st.session_state.game_started = False 
+                st.rerun()
+
+        elif menu_choice == "Logout":
+            st.error("This will take you back to the login screen.")
+            if st.button("Confirm Logout"):
                 st.session_state.logged_in = False
+                st.session_state.game_started = False 
                 st.rerun()
 
 # --- MAIN ROUTING LOGIC ---
@@ -60,11 +68,16 @@ elif not st.session_state.game_started:
             st.rerun()
     with col2:
         if st.button("NEW GAME", use_container_width=True, type="primary"):
-            reset_game() # Clears file and memory
+            # This is the heavy reset from your state.py
+            reset_game() 
 
 else:
-    # Navigation logic
-    if st.session_state.location == "Plains": show_plains()
-    elif st.session_state.location == "Lake": show_lake()
-    elif st.session_state.location == "Village": show_village()
-    elif st.session_state.location == "Fishmonger": show_fishmonger()
+    # Navigation logic - checks where you are and shows that file
+    if st.session_state.location == "Plains": 
+        show_plains()
+    elif st.session_state.location == "Lake": 
+        show_lake()
+    elif st.session_state.location == "Village": 
+        show_village()
+    elif st.session_state.location == "Fishmonger": 
+        show_fishmonger()
