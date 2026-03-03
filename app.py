@@ -145,7 +145,7 @@ elif st.session_state.location == "Plains":
                 
                 time.sleep(5) # Wait for 5 seconds before redirecting
             
-            st.session_state.location = "Plains"
+            st.session_state.location = "Village"
             st.rerun()
     with col3:
         if st.button("Walk south"):
