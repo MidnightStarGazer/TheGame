@@ -24,6 +24,8 @@ if "fish_dir" not in st.session_state:
     st.session_state.fish_dir = "LEFT"
 if "splash_start_time" not in st.session_state:
     st.session_state.splash_start_time = 0
+if "move_start_time" not in st.session_state:
+    st.session_state.move_start_time = 0
 
 # --- LOGIN DIALOG ---
 @st.dialog("Login to TheGame")
@@ -242,8 +244,9 @@ elif st.session_state.location == "Lake":
         # BATTLE INTRO
         elif st.session_state.fishing_step == "battle_intro":
             st.success(f"is that?.... a {st.session_state.current_fish}")
-            if st.button("Start Battle!"):
+            if st.button("Start Reeling In!"):
                 st.session_state.fishing_step = "battle"
+                st.session_state.move_start_time = time.time() # Start the timer for the first move
                 st.rerun()
 
         # THE BATTLE
@@ -253,15 +256,33 @@ elif st.session_state.location == "Lake":
             hp_col1.metric("Your HP", st.session_state.player_hp)
             hp_col2.metric("Fish HP", st.session_state.fish_hp)
             
-            st.info(f"The fish pulls **{st.session_state.fish_dir}**!")
+            # Difficulty settings: Time allowed per move (in seconds)
+            if st.session_state.current_fish == "Rare Golden Fish":
+                reaction_limit = 1.3
+            elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]:
+                reaction_limit = 2.0
+            else:
+                reaction_limit = 3.0
+
+            st.info(f"The fish pulls **{st.session_state.fish_dir}**! (Quickly!)")
             b_col1, b_col2, b_col3 = st.columns(3)
             
             def execute_pull(direction):
-                if direction == st.session_state.fish_dir:
+                elapsed = time.time() - st.session_state.move_start_time
+                
+                # Check for "Too Slow" penalty first
+                if elapsed > reaction_limit:
+                    st.session_state.player_hp -= 2
+                    st.toast(f"TOO SLOW! The fish yanks the line! ({elapsed:.1f}s)", icon="⚠️")
+                # Then check if they pulled the right way
+                elif direction == st.session_state.fish_dir:
                     st.session_state.fish_hp -= 2
+                    st.toast("Great reflex!", icon="✅")
                 else:
                     st.session_state.player_hp -= 2
+                    st.toast("Wrong direction!", icon="❌")
                     
+                # Reset for next move
                 if st.session_state.fish_hp <= 0:
                     st.session_state.inventory[st.session_state.current_fish] = st.session_state.inventory.get(st.session_state.current_fish, 0) + 1
                     st.session_state.fishing_step = "won"
@@ -269,6 +290,7 @@ elif st.session_state.location == "Lake":
                     st.session_state.fishing_step = "lost"
                 else:
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
+                    st.session_state.move_start_time = time.time() # Restart timer for the new direction
 
             if b_col1.button("Pull LEFT"): execute_pull("LEFT"); st.rerun()
             if b_col2.button("Pull UP"): execute_pull("UP"); st.rerun()
@@ -353,7 +375,7 @@ elif st.session_state.location == "Fishmonger":
                 "Bass": '"Ah, a solid Bass."',
                 "Cat-fish": '"A Cat-fish! Nasty whiskers."',
                 "Huge Bass": '"Whoa! A Huge Bass!"',
-                "Rare Golden Fish": '"Oh? A Rare Golden Fish? Haven\'t seen one in years!"'
+                "Rare Golden Fish": '"Oh? A Rare Golden Fish? Haven\'t seen one of these in years!"'
             }
             
             total_coins = 0
