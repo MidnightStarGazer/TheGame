@@ -25,7 +25,7 @@ def login_dialog():
         else:
             st.error("Incorrect credentials.")
 
-# --- BUY WORMS DIALOG (Converted from JS Modal) ---
+# --- BUY WORMS DIALOG (Converted from JS Modal based on your old html design) ---
 @st.dialog("Buy Worms")
 def buy_worms_dialog():
     st.write("Select the bundle size:")
@@ -165,7 +165,7 @@ elif st.session_state.location == "Lake":
             st.toast("You felt a tug!!")
             time.sleep(1)
             
-            # 3. Probability Check (Replicating your JS logic)
+            # 3. Probability Check (Replicating your JS logic based on your old html design)
             catch_chance = random.randint(1, 300) if has_worms else random.randint(1, 100)
             
             if catch_chance > 295: catch = "Huge Bass"
@@ -191,7 +191,7 @@ elif st.session_state.location == "Lake":
             st.session_state.location = "Plains"
             st.rerun()
 
-# --- VILLAGE ---
+# --- VILLAGE --- (based on your old html design)
 elif st.session_state.location == "Village":
     st.title("🏘️ Village")
     st.image("https://via.placeholder.com/800x400.png?text=A+small+but+bustling+Village")
@@ -236,7 +236,7 @@ elif st.session_state.location == "Village":
             st.session_state.location = "Plains"
             st.rerun()
 
-# --- FISHMONGER'S HOUSE ---
+# --- FISHMONGER'S HOUSE --- (based on your old html design)
 elif st.session_state.location == "Fishmonger":
     st.title("🐟 Fishmonger's House")
     
@@ -259,6 +259,17 @@ elif st.session_state.location == "Fishmonger":
                 "Bass": 25, "Cat-fish": 50, "Huge Bass": 100, "Rare Golden Fish": 500
             }
             
+            # The custom dialogue for each fish type
+            fish_dialogue = {
+                "Trout": '"A Trout, eh? Standard fare, but it\'ll feed a family."',
+                "Perch": '"Perch. Decent eating. I\'ll take it."',
+                "Carp": '"Carp. A bit muddy, but someone will buy it."',
+                "Bass": '"Ah, a solid Bass. Good catch, stranger."',
+                "Cat-fish": '"A Cat-fish! Nasty whiskers, but sweet meat."',
+                "Huge Bass": '"Whoa! A Huge Bass! Put up a fight, did it?"',
+                "Rare Golden Fish": '"Oh? A Rare Golden Fish? Not bad... not bad at all. Haven\'t seen one of these in years!"'
+            }
+            
             total_coins = 0
             fish_to_remove = []
             
@@ -268,10 +279,23 @@ elif st.session_state.location == "Fishmonger":
                     fish_to_remove.append(item)
             
             if total_coins > 0:
+                # The Dialogue Sequence
+                dialog_box = st.empty() # Creates a temporary placeholder on the screen
+                
+                for fish in fish_to_remove:
+                    dialog_box.info(f"The fishmonger inspects the {fish}...\n\n{fish_dialogue[fish]}")
+                    time.sleep(4) # Waits 4 seconds for each unique fish type you sell
+                
+                dialog_box.empty() # Clears the dialogue text once he is done talking
+                
+                # Delete the sold fish and add the coins
                 for fish in fish_to_remove:
                     del st.session_state.inventory[fish]
                 st.session_state.inventory["coins"] = st.session_state.inventory.get("coins", 0) + total_coins
+                
                 st.success(f"You sold your fish for {total_coins} coins!")
+                time.sleep(2) # Give the player a second to read the success message
+                st.rerun() # Refresh the screen to update the sidebar inventory
             else:
                 st.error("You have no valuable fish to sell.")
                 
