@@ -42,7 +42,7 @@ if st.session_state.logged_in:
         elif menu_choice == "Quit":
             st.warning("Logout of the session?")
             if st.button("Logout"):
-                st.session_state.logged_in = False # Log out without deleting save
+                st.session_state.logged_in = False
                 st.rerun()
 
 # --- MAIN ROUTING LOGIC ---

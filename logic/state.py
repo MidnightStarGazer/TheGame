@@ -19,7 +19,6 @@ def reset_game():
     if os.path.exists(SAVE_FILE):
         os.remove(SAVE_FILE)
     # Clear session state and re-initialize with defaults
-    st.session_state.clear()
     st.rerun()
 
 def init_session_state():
