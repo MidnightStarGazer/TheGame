@@ -230,14 +230,14 @@ elif st.session_state.location == "Lake":
                     st.session_state.player_hp = 10
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
                 else:
-                    st.toast("You actually just caught a worthless kelp... you threw it away.", icon="🌿")
+                    st.error("You actually just caught a worthless kelp... you threw it away.")
                     st.session_state.fishing_step = "idle"
                 
                 st.rerun()
 
             # If they don't click REEL IN within 2 seconds
             time.sleep(2)
-            st.toast("Too late! You lost the worm and the fish.", icon="❌")
+            st.error("Too late! You lost the worm and the fish.")
             st.session_state.fishing_step = "idle"
             st.rerun()
 
