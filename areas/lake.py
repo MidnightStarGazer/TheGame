@@ -24,11 +24,13 @@ def show_lake():
                     st.session_state.inventory["Worms"] -= 1
                     if st.session_state.inventory["Worms"] == 0:
                         del st.session_state.inventory["Worms"]
+                    
                     st.session_state.fishing_step = "waiting"
                     st.session_state.splash_start_time = time.time()
-                    st.rerun()
-
+                    
+                    # Moved save_game BEFORE rerun so it actually saves the worm count
                     save_game()
+                    st.rerun()
                 else:
                     st.warning("Fishing without bait seems kinda silly.... you need Worms.")
 
@@ -41,7 +43,6 @@ def show_lake():
                 st.session_state.splash_start_time = time.time()
                 st.rerun()
             else:
-                # Ito ang nagpapatakbo ng timer/relo
                 time.sleep(0.1)
                 st.rerun()
 
@@ -51,7 +52,7 @@ def show_lake():
             if st.button("REEL IN!", key="reel_fake"):
                 st.error("You pulled too early! The fish got scared away.")
                 st.session_state.fishing_step = "idle"
-                time.sleep(2) # <--- Pause para makita mo yung error
+                time.sleep(2)
                 st.rerun()
             else:
                 elapsed = time.time() - st.session_state.splash_start_time
@@ -63,14 +64,13 @@ def show_lake():
                     time.sleep(0.1)
                     st.rerun()
 
-        # --- 4. REAL SPLASH: Dito tayo nag-fix! ---
+        # --- 4. REAL SPLASH ---
         elif st.session_state.fishing_step == "real_splash":
             placeholder.error("!!SPLASH!!")
             button_pressed = st.button("REEL IN!", key="reel_real")
             elapsed = time.time() - st.session_state.splash_start_time
             
             if button_pressed:
-                # Catch Logic
                 catch_chance = random.randint(1, 400)
                 if catch_chance == 400: catch = "Rare Golden Fish"
                 elif catch_chance > 393: catch = "Huge Bass"
@@ -85,7 +85,6 @@ def show_lake():
                 
                 if st.session_state.current_fish:
                     st.session_state.fishing_step = "battle_intro"
-                    # HP Settings
                     if st.session_state.current_fish in ["Trout", "Perch", "Carp"]: st.session_state.fish_hp = 10
                     elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: st.session_state.fish_hp = 15
                     elif st.session_state.current_fish == "Rare Golden Fish": st.session_state.fish_hp = 30
@@ -94,23 +93,20 @@ def show_lake():
                 else:
                     st.error("You actually just caught a worthless kelp... you threw it away.")
                     st.session_state.fishing_step = "idle"
-                    time.sleep(2) # <--- Pause para mabasa yung 'kelp'
+                    time.sleep(2)
                 st.rerun()
 
             elif elapsed >= 2:
-                # ETO YUNG FIX: Papakita yung warning at mag-sleep ng 2 secs
                 placeholder.warning("Too late! You lost the worm and the fish.")
                 st.session_state.fishing_step = "idle"
                 save_game()
-                time.sleep(2) # <--- Heto yung kailangan para hindi mag-flash lang!
+                time.sleep(2)
                 st.rerun()
-            
             else:
-                # Force refresh para laging updated yung 'elapsed'
                 time.sleep(0.1)
                 st.rerun()
 
-        # --- 5. BATTLE LOGIC: Battle, Won, at Lost ---
+        # --- 5. BATTLE LOGIC ---
         elif st.session_state.fishing_step == "battle_intro":
             st.success(f"Is that?.... a {st.session_state.current_fish}!")
             if st.button("Start Reeling In!", key="start_battle"):
@@ -119,12 +115,19 @@ def show_lake():
                 st.rerun()
 
         elif st.session_state.fishing_step == "battle":
-            st.subheader(f"Fighting: {st.session_state.current_fish}")
+            st.subheader(f"Reeling in: {st.session_state.current_fish}")
+            
+            # --- INSTRUCTIONS ADDED HERE ---
+            st.markdown("""
+            > **How to play:** The fish is trying to escape! 
+            > Watch its movement and **pull in the opposite direction** to wear it down. 
+            > Don't be too slow, or it'll yank the line!
+            """)
+            
             hp_col1, hp_col2 = st.columns(2)
             hp_col1.metric("Your HP", st.session_state.player_hp)
             hp_col2.metric("Fish HP", st.session_state.fish_hp)
             
-            # Difficulty base sa fesh 
             if st.session_state.current_fish == "Rare Golden Fish": reaction_limit = 2
             elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: reaction_limit = 2
             else: reaction_limit = 2.5
@@ -138,7 +141,7 @@ def show_lake():
                 elif st.session_state.player_hp <= 0:
                     st.session_state.fishing_step = "lost"
                 else:
-                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
+                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "DIVING DOWN"])
                     st.session_state.move_start_time = time.time()
 
             b_col1, b_col2, b_col3 = st.columns(3)
