@@ -39,7 +39,7 @@ def login_dialog():
         else:
             st.error("Incorrect credentials.")
 
-# --- BUY WORMS DIALOG (Converted from JS Modal based on your old html design) ---
+# --- BUY WORMS DIALOG ---
 @st.dialog("Buy Worms")
 def buy_worms_dialog():
     st.write("Select the bundle size:")
@@ -81,11 +81,10 @@ if st.session_state.logged_in:
         elif menu_choice == "Quit":
             st.warning("Are you sure you want to exit?")
             if st.button("Quit Game"):
-                # Complete reset of the session state to go back to the start
                 st.session_state.logged_in = False
                 st.session_state.game_started = False
-                st.session_state.location = "Plains" # Reset location on quit
-                st.session_state.inventory = {} # Clears inventory on quit
+                st.session_state.location = "Plains"
+                st.session_state.inventory = {}
                 st.session_state.fishing_step = "idle"
                 st.rerun()
 
@@ -104,7 +103,6 @@ elif not st.session_state.game_started:
 # --- VAST PLAINS ---
 elif st.session_state.location == "Plains":
     st.title("🌾 Vast Plains")
-    # Using the same design as the file you made and uploaded
     st.image("https://via.placeholder.com/800x400.png?text=Vast+Plains+Landscape") 
     
     st.write("""
@@ -141,29 +139,22 @@ elif st.session_state.location == "Plains":
         if st.button("Walk south"):
             with st.spinner("Walking towards the lake in the distance..."):
                 time.sleep(2)
-            # Change location and rerun to load the Lake screen
             st.session_state.location = "Lake"
             st.rerun()
 
-# --- LAKESIDE --- (based on your old html design)
+# --- LAKESIDE --- 
 elif st.session_state.location == "Lake":
     st.title("🌊 Lake Side")
-    
     st.image("https://via.placeholder.com/800x400.png?text=Peaceful+Lakeside")
     
-    st.write("""
-    You arrived at the lake. The air is filled with the crisp scent of water mingled with the earthy aroma of nearby foliage. 
-    The gentle ripples of the water create a soothing melody, punctuated by the occasional call of distant birds.
-    
-    You gaze at the waters and see small fishes swimming around.
-    """)
+    st.write("You arrived at the lake. You gaze at the waters and see small fishes swimming around.")
     
     col1, col2 = st.columns(2)
     
     with col1:
         placeholder = st.empty()
         
-        # IDLE: The very start
+        # IDLE: The Start
         if st.session_state.fishing_step == "idle":
             if st.button("Start Fishing"):
                 if st.session_state.inventory.get("Worms", 0) > 0:
@@ -175,51 +166,49 @@ elif st.session_state.location == "Lake":
                 else:
                     st.warning("Fishing without bait seems kinda silly.... you need Worms.")
 
-        # WAITING: Bubble Loop
+        # WAITING: The Bubble Loop
         elif st.session_state.fishing_step == "waiting":
             placeholder.info("Bubble... Bubble... Bubble...")
             time.sleep(4)
-            # Choose if the next thing is a fake splash or the real deal
+            # Randomly pick if the splash is a fake-out or the real deal
             st.session_state.fishing_step = random.choice(["fake_splash", "real_splash"])
             st.rerun()
 
-        # FAKE SPLASH: Lowercase !!splash!!
+        # FAKE SPLASH: Too Early Plan
         elif st.session_state.fishing_step == "fake_splash":
             placeholder.warning("!!splash!!")
-            if st.button("Reel In!"):
+            if st.button("REEL IN!"):
                 st.error("You pulled too early! The fish got scared away.")
                 st.session_state.fishing_step = "idle"
                 time.sleep(2)
                 st.rerun()
             
-            # Show the splash for 2 seconds, then go back to bubbles
+            # If they don't click, it goes back to bubbles after 2 seconds
             time.sleep(2)
             st.session_state.fishing_step = "waiting"
             st.rerun()
 
-        # REAL SPLASH: Uppercase !!SPLASH!!
+        # REAL SPLASH: Hook Window Plan
         elif st.session_state.fishing_step == "real_splash":
             placeholder.error("!!SPLASH!!")
             
-            # We use a button to catch it
+            # The player must click this button within the 2-second sleep below
             if st.button("REEL IN!"):
-                # Roll for the fish type now
                 catch_chance = random.randint(1, 400)
                 if catch_chance == 400: catch = "Rare Golden Fish"
                 elif catch_chance > 393: catch = "Huge Bass"
                 elif catch_chance > 386: catch = "Cat-fish"
                 elif catch_chance > 374: catch = "Bass"
                 elif catch_chance > 340: catch = "Trout"
-                elif catch_chance > 290: catch = "Perch"
-                elif catch_chance > 220: catch = "Carp"
+                elif catch_chance > 300: catch = "Perch"
+                elif catch_chance > 240: catch = "Carp"
                 else: catch = None
                 
                 st.session_state.current_fish = catch
                 
                 if st.session_state.current_fish:
                     st.session_state.fishing_step = "battle_intro"
-                    
-                    # Set HP based on categories
+                    # Set HP
                     if st.session_state.current_fish in ["Trout", "Perch", "Carp"]:
                         st.session_state.fish_hp = 10
                     elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]:
@@ -232,13 +221,13 @@ elif st.session_state.location == "Lake":
                 else:
                     st.error("You actually just caught a worthless kelp... you threw it away.")
                     st.session_state.fishing_step = "idle"
-                
                 st.rerun()
 
-            # If they don't click REEL IN within 2 seconds
+            # "Too Late" Logic: If the code reaches here, the button wasn't clicked in time
             time.sleep(2)
-            st.error("Too late! You lost the worm and the fish.")
+            placeholder.warning("Too late! You lost the worm and the fish.")
             st.session_state.fishing_step = "idle"
+            time.sleep(2)
             st.rerun()
 
         # BATTLE INTRO
@@ -246,35 +235,28 @@ elif st.session_state.location == "Lake":
             st.success(f"is that?.... a {st.session_state.current_fish}")
             if st.button("Start Reeling In!"):
                 st.session_state.fishing_step = "battle"
-                st.session_state.move_start_time = time.time() # Start the timer for the first move
+                st.session_state.move_start_time = time.time()
                 st.rerun()
 
-        # THE BATTLE
+        # THE BATTLE: Move Timer Plan
         elif st.session_state.fishing_step == "battle":
             st.subheader(f"Fighting: {st.session_state.current_fish}")
             hp_col1, hp_col2 = st.columns(2)
             hp_col1.metric("Your HP", st.session_state.player_hp)
             hp_col2.metric("Fish HP", st.session_state.fish_hp)
             
-            # Difficulty settings: Time allowed per move (in seconds)
-            if st.session_state.current_fish == "Rare Golden Fish":
-                reaction_limit = 1.3
-            elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]:
-                reaction_limit = 2.0
-            else:
-                reaction_limit = 3.0
+            if st.session_state.current_fish == "Rare Golden Fish": reaction_limit = 1.3
+            elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: reaction_limit = 2.0
+            else: reaction_limit = 3.0
 
             st.info(f"The fish pulls **{st.session_state.fish_dir}**! (Quickly!)")
             b_col1, b_col2, b_col3 = st.columns(3)
             
             def execute_pull(direction):
                 elapsed = time.time() - st.session_state.move_start_time
-                
-                # Check for "Too Slow" penalty first
                 if elapsed > reaction_limit:
                     st.session_state.player_hp -= 2
                     st.toast(f"TOO SLOW! The fish yanks the line! ({elapsed:.1f}s)", icon="⚠️")
-                # Then check if they pulled the right way
                 elif direction == st.session_state.fish_dir:
                     st.session_state.fish_hp -= 2
                     st.toast("Great reflex!", icon="✅")
@@ -282,7 +264,6 @@ elif st.session_state.location == "Lake":
                     st.session_state.player_hp -= 2
                     st.toast("Wrong direction!", icon="❌")
                     
-                # Reset for next move
                 if st.session_state.fish_hp <= 0:
                     st.session_state.inventory[st.session_state.current_fish] = st.session_state.inventory.get(st.session_state.current_fish, 0) + 1
                     st.session_state.fishing_step = "won"
@@ -290,14 +271,14 @@ elif st.session_state.location == "Lake":
                     st.session_state.fishing_step = "lost"
                 else:
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
-                    st.session_state.move_start_time = time.time() # Restart timer for the new direction
+                    st.session_state.move_start_time = time.time()
 
             if b_col1.button("Pull LEFT"): execute_pull("LEFT"); st.rerun()
             if b_col2.button("Pull UP"): execute_pull("UP"); st.rerun()
             if b_col3.button("Pull RIGHT"): execute_pull("RIGHT"); st.rerun()
 
         elif st.session_state.fishing_step == "won":
-            st.success(f"You caught a {st.session_state.current_fish}! Enjoy your catch.")
+            st.success(f"You caught a {st.session_state.current_fish}!")
             if st.button("Continue Fishing"):
                 st.session_state.fishing_step = "idle"
                 st.rerun()
@@ -311,99 +292,47 @@ elif st.session_state.location == "Lake":
     with col2:
         if st.session_state.fishing_step == "idle":
             if st.button("Walk Back to the Plains"):
-                with st.spinner("Heading back to the plains..."):
-                    time.sleep(1.5)
                 st.session_state.location = "Plains"
                 st.rerun()
 
-# --- VILLAGE --- (based on your old html design)
+# --- VILLAGE & FISHMONGER (Keep your existing logic for these) ---
 elif st.session_state.location == "Village":
     st.title("🏘️ Village")
     st.image("https://via.placeholder.com/800x400.png?text=A+small+but+bustling+Village")
-    
-    st.write("""
-    A lively village stretches out in front of you. There are people everywhere, and you notice a few interesting spots along the streets. 
-    One of them is a small building with a crude sign that reads, "I BUY FISH." Other than that, there isn't much else to see yet. (WORK IN PROGRESS)
-    """)
+    st.write("A lively village stretches out in front of you.")
     
     col1, col2 = st.columns(2)
-    
-    with col1:
-        if st.button("Go to Fishmonger's House"):
-            st.session_state.location = "Fishmonger"
-            st.rerun()
-            
-    with col2:
-        if st.button("Go back to the plains"):
-            st.write("""
-            *As you walk along the dirt tracks, stepping away from the village, a serene calmness envelops you. The gentle rustle of the wind through the tall grass accompanies your footsteps, and you notice the distant calls of birds echoing across the open expanse. A pair of majestic eagles soars gracefully overhead, their keen eyes scanning the landscape below.*
-            """)
-            with st.spinner("Walking back to the plains..."):
-                time.sleep(5) 
-                random_event_chance = random.randint(1, 100)
-                if random_event_chance <= 30:
-                    random_event = random.randint(1, 3)
-                    if random_event == 1: st.info("You see that same eagle hunting a bunny.")
-                    elif random_event == 2: st.warning("A bunny jumped out of the bush!")
-                    else: st.success("You spot a group of deer.")
-                else:
-                    st.success("You feel at ease from the peaceful atmosphere.")
-                time.sleep(3) 
-            st.session_state.location = "Plains"
-            st.rerun()
+    if col1.button("Go to Fishmonger's House"):
+        st.session_state.location = "Fishmonger"
+        st.rerun()
+    if col2.button("Go back to the plains"):
+        with st.spinner("Walking back..."):
+            time.sleep(3)
+        st.session_state.location = "Plains"
+        st.rerun()
 
-# --- FISHMONGER'S HOUSE --- (based on your old html design)
 elif st.session_state.location == "Fishmonger":
     st.title("🐟 Fishmonger's House")
-    st.write("""
-    Stepping inside the cramped building, your eyes land on the fishmonger. The air is thick with the overpowering smell of rotting fish. 
-    *"What do you need, stranger?"* he grunts.
-    """)
+    st.write('"What do you need, stranger?"')
     
     col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button("Sell Fish"):
-            fish_prices = {
-                "Trout": 5, "Perch": 8, "Carp": 10, 
-                "Bass": 20, "Cat-fish": 30, "Huge Bass": 55, "Rare Golden Fish": 500
-            }
-            fish_dialogue = {
-                "Trout": '"A Trout, eh? Standard fare."',
-                "Perch": '"Perch. Decent eating."',
-                "Carp": '"Carp. A bit muddy."',
-                "Bass": '"Ah, a solid Bass."',
-                "Cat-fish": '"A Cat-fish! Nasty whiskers."',
-                "Huge Bass": '"Whoa! A Huge Bass!"',
-                "Rare Golden Fish": '"Oh? A Rare Golden Fish? Haven\'t seen one of these in years!"'
-            }
-            
-            total_coins = 0
-            fish_to_remove = []
-            for item, count in st.session_state.inventory.items():
-                if item in fish_prices:
-                    total_coins += fish_prices[item] * count
-                    fish_to_remove.append(item)
-            
-            if total_coins > 0:
-                dialog_box = st.empty()
-                for fish in fish_to_remove:
-                    dialog_box.info(f"The fishmonger inspects the {fish}...\n\n{fish_dialogue[fish]}")
-                    time.sleep(4)
-                dialog_box.empty()
-                for fish in fish_to_remove: del st.session_state.inventory[fish]
-                st.session_state.inventory["coins"] = st.session_state.inventory.get("coins", 0) + total_coins
-                st.success(f"You sold your fish for {total_coins} coins!")
-                time.sleep(2)
-                st.rerun()
-            else:
-                st.error("You have no valuable fish to sell.")
-                
-    with col2:
-        if st.button("Buy Worms"):
-            buy_worms_dialog()
-            
-    with col3:
-        if st.button("Back to Village"):
-            st.session_state.location = "Village"
+    if col1.button("Sell Fish"):
+        fish_prices = {"Trout": 5, "Perch": 8, "Carp": 10, "Bass": 20, "Cat-fish": 30, "Huge Bass": 55, "Rare Golden Fish": 500}
+        total_coins = 0
+        fish_to_remove = []
+        for item, count in st.session_state.inventory.items():
+            if item in fish_prices:
+                total_coins += fish_prices[item] * count
+                fish_to_remove.append(item)
+        if total_coins > 0:
+            for f in fish_to_remove: del st.session_state.inventory[f]
+            st.session_state.inventory["coins"] = st.session_state.inventory.get("coins", 0) + total_coins
+            st.success(f"Sold for {total_coins} coins!")
+            time.sleep(2)
             st.rerun()
+        else:
+            st.error("No fish to sell.")
+    if col2.button("Buy Worms"): buy_worms_dialog()
+    if col3.button("Back to Village"):
+        st.session_state.location = "Village"
+        st.rerun()
