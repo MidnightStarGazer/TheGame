@@ -26,6 +26,7 @@ def show_lake():
                     if st.session_state.inventory["Worms"] == 0:
                         del st.session_state.inventory["Worms"]
                     st.session_state.fishing_step = "waiting"
+                    st.session_state.splash_start_time = time.time()
                     st.rerun()
                 else:
                     st.warning("Fishing without bait seems kinda silly.... you need Worms.")
@@ -33,9 +34,11 @@ def show_lake():
         # WAITING
         elif st.session_state.fishing_step == "waiting":
             placeholder.info("Bubble... Bubble... Bubble...")
-            time.sleep(4)
-            st.session_state.fishing_step = random.choice(["fake_splash", "real_splash"])
-            st.rerun()
+            elapsed = time.time() - st.session_state.splash_start_time
+            if elapsed >= 4:
+                st.session_state.fishing_step = random.choice(["fake_splash", "real_splash"])
+                st.session_state.splash_start_time = time.time()
+                st.rerun()
 
         # FAKE SPLASH
         elif st.session_state.fishing_step == "fake_splash":
@@ -43,16 +46,21 @@ def show_lake():
             if st.button("REEL IN!"):
                 st.error("You pulled too early! The fish got scared away.")
                 st.session_state.fishing_step = "idle"
-                time.sleep(2)
                 st.rerun()
-            time.sleep(2)
-            st.session_state.fishing_step = "waiting"
-            st.rerun()
+            else:
+                elapsed = time.time() - st.session_state.splash_start_time
+                if elapsed >= 2:
+                    st.session_state.fishing_step = "waiting"
+                    st.session_state.splash_start_time = time.time()
+                    st.rerun()
 
         # REAL SPLASH
         elif st.session_state.fishing_step == "real_splash":
             placeholder.error("!!SPLASH!!")
-            if st.button("REEL IN!"):
+            button_pressed = st.button("REEL IN!")
+            elapsed = time.time() - st.session_state.splash_start_time
+            
+            if button_pressed:
                 catch_chance = random.randint(1, 400)
                 if catch_chance == 400: catch = "Rare Golden Fish"
                 elif catch_chance > 393: catch = "Huge Bass"
@@ -76,12 +84,10 @@ def show_lake():
                     st.error("You actually just caught a worthless kelp... you threw it away.")
                     st.session_state.fishing_step = "idle"
                 st.rerun()
-
-            time.sleep(2)
-            placeholder.warning("Too late! You lost the worm and the fish.")
-            st.session_state.fishing_step = "idle"
-            time.sleep(2)
-            st.rerun()
+            elif elapsed >= 2:
+                placeholder.warning("Too late! You lost the worm and the fish.")
+                st.session_state.fishing_step = "idle"
+                st.rerun()
 
         # BATTLE INTRO
         elif st.session_state.fishing_step == "battle_intro":
@@ -116,29 +122,32 @@ def show_lake():
 
             b_col1, b_col2, b_col3 = st.columns(3)
             
+            button_pressed = False
             if b_col1.button("Pull LEFT"):
                 if "LEFT" == st.session_state.fish_dir: st.session_state.fish_hp -= 2; st.toast("Great reflex!", icon="✅")
                 else: st.session_state.player_hp -= 2; st.toast("Wrong direction!", icon="❌")
-                advance_battle()
-                st.rerun()
+                button_pressed = True
                 
             if b_col2.button("Pull UP"):
                 if "UP" == st.session_state.fish_dir: st.session_state.fish_hp -= 2; st.toast("Great reflex!", icon="✅")
                 else: st.session_state.player_hp -= 2; st.toast("Wrong direction!", icon="❌")
-                advance_battle()
-                st.rerun()
+                button_pressed = True
                 
             if b_col3.button("Pull RIGHT"):
                 if "RIGHT" == st.session_state.fish_dir: st.session_state.fish_hp -= 2; st.toast("Great reflex!", icon="✅")
                 else: st.session_state.player_hp -= 2; st.toast("Wrong direction!", icon="❌")
+                button_pressed = True
+            
+            if button_pressed:
                 advance_battle()
                 st.rerun()
-
-            time.sleep(reaction_limit) 
-            st.session_state.player_hp -= 2
-            st.toast("TOO SLOW! The fish yanks the line!", icon="⚠️")
-            advance_battle()
-            st.rerun()
+            else:
+                elapsed = time.time() - st.session_state.move_start_time
+                if elapsed >= reaction_limit:
+                    st.session_state.player_hp -= 2
+                    st.toast("TOO SLOW! The fish yanks the line!", icon="⚠️")
+                    advance_battle()
+                    st.rerun()
 
         elif st.session_state.fishing_step == "won":
             st.success(f"You caught a {st.session_state.current_fish}!")
