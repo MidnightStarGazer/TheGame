@@ -25,6 +25,31 @@ def login_dialog():
         else:
             st.error("Incorrect credentials.")
 
+# --- BUY WORMS DIALOG (Converted from JS Modal) ---
+@st.dialog("Buy Worms")
+def buy_worms_dialog():
+    st.write("Select the bundle size:")
+    coins = st.session_state.inventory.get("coins", 0)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    def purchase(cost, amount, name):
+        if coins >= cost:
+            st.session_state.inventory["coins"] -= cost
+            st.session_state.inventory["Worms"] = st.session_state.inventory.get("Worms", 0) + amount
+            st.success(f"You bought a {name} for {cost} coins.")
+            time.sleep(1.5)
+            st.rerun()
+        else:
+            st.error("You don't have enough coins to buy this bundle.")
+
+    with col1:
+        if st.button("Small (5 coins)"): purchase(5, 5, "Small Bundle")
+    with col2:
+        if st.button("Medium (10 coins)"): purchase(10, 10, "Medium Bundle")
+    with col3:
+        if st.button("Large (15 coins)"): purchase(15, 15, "Large Bundle")
+
 # --- SIDEBAR ---
 if st.session_state.logged_in:
     with st.sidebar:
@@ -42,6 +67,7 @@ if st.session_state.logged_in:
         elif menu_choice == "Quit":
             st.warning("Are you sure you want to exit?")
             if st.button("Quit Game"):
+                # Complete reset of the session state to go back to the start
                 st.session_state.logged_in = False
                 st.session_state.game_started = False
                 st.session_state.location = "Plains" # Reset location on quit
@@ -63,6 +89,7 @@ elif not st.session_state.game_started:
 # --- VAST PLAINS ---
 elif st.session_state.location == "Plains":
     st.title("🌾 Vast Plains")
+    # Using the same design as the file you made and uploaded
     st.image("https://via.placeholder.com/800x400.png?text=Vast+Plains+Landscape") 
     
     st.write("""
@@ -90,7 +117,10 @@ elif st.session_state.location == "Plains":
                 
     with col2:
         if st.button("Follow the dirt track"):
-            st.write("Walking toward the village...")
+            with st.spinner("Walking toward the village..."):
+                time.sleep(1.5)
+            st.session_state.location = "Village"
+            st.rerun()
 
     with col3:
         if st.button("Walk south"):
@@ -100,7 +130,7 @@ elif st.session_state.location == "Plains":
             st.session_state.location = "Lake"
             st.rerun()
 
-# --- LAKESIDE ---
+# --- LAKESIDE --- (based on your old html design)
 elif st.session_state.location == "Lake":
     st.title("🌊 Lake Side")
     
@@ -159,4 +189,97 @@ elif st.session_state.location == "Lake":
             with st.spinner("Heading back to the plains..."):
                 time.sleep(1.5)
             st.session_state.location = "Plains"
+            st.rerun()
+
+# --- VILLAGE ---
+elif st.session_state.location == "Village":
+    st.title("🏘️ Village")
+    st.image("https://via.placeholder.com/800x400.png?text=A+small+but+bustling+Village")
+    
+    # Grammar fixed description
+    st.write("""
+    A lively village stretches out in front of you. There are people everywhere, and you notice a few interesting spots along the streets. 
+    One of them is a small building with a crude sign that reads, "I BUY FISH." Other than that, there isn't much else to see yet. (WORK IN PROGRESS)
+    """)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("Go to Fishmonger's House"):
+            st.session_state.location = "Fishmonger"
+            st.rerun()
+            
+    with col2:
+        if st.button("Go back to the plains"):
+            st.write("""
+            *As you walk along the dirt tracks, stepping away from the village, a serene calmness envelops you. The gentle rustle of the wind through the tall grass accompanies your footsteps, and you notice the distant calls of birds echoing across the open expanse. A pair of majestic eagles soars gracefully overhead, their keen eyes scanning the landscape below. You catch glimpses of vibrant wildflowers swaying in the breeze and delicate butterflies flitting from bloom to bloom. The songs of unseen birds fill the air, harmonizing with the rhythm of nature.*
+            """)
+            
+            with st.spinner("Walking back to the plains..."):
+                time.sleep(5) # Wait for 5 seconds before showing the event
+                
+                # Random Event Logic
+                random_event_chance = random.randint(1, 100)
+                if random_event_chance <= 30:
+                    random_event = random.randint(1, 3)
+                    if random_event == 1:
+                        st.info("You see that same eagle from before hunting a bunny from afar. But then again, it does not really concern you.")
+                    elif random_event == 2:
+                        st.warning("A bunny jumped out of the bush as you passed by, your heart almost jumped out of your chest!")
+                    else:
+                        st.success("You spot a group of deer grazing peacefully.")
+                else:
+                    st.success("You feel at ease from the peaceful atmosphere of the plains. And finally, you saw something in the distance...")
+                
+                time.sleep(3) # Wait for 3 seconds before redirecting
+            
+            st.session_state.location = "Plains"
+            st.rerun()
+
+# --- FISHMONGER'S HOUSE ---
+elif st.session_state.location == "Fishmonger":
+    st.title("🐟 Fishmonger's House")
+    
+    # Grammar fixed description
+    st.write("""
+    Stepping inside the cramped building, your eyes land on the fishmonger. The first thing that comes to mind is how unkempt he looks—oily and dirty, with wild hair and a scraggly beard. The air is thick with the overpowering smell of rotting fish. 
+    
+    As you try to avoid his gaze, you notice a large box beside him filled entirely with squirming worms. Suddenly, he locks eyes with you. 
+    
+    *"What do you need, stranger?"* he grunts. What do you do?
+    """)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("Sell Fish"):
+            # Selling logic
+            fish_prices = {
+                "Trout": 10, "Perch": 15, "Carp": 20, 
+                "Bass": 25, "Cat-fish": 50, "Huge Bass": 100, "Rare Golden Fish": 500
+            }
+            
+            total_coins = 0
+            fish_to_remove = []
+            
+            for item, count in st.session_state.inventory.items():
+                if item in fish_prices:
+                    total_coins += fish_prices[item] * count
+                    fish_to_remove.append(item)
+            
+            if total_coins > 0:
+                for fish in fish_to_remove:
+                    del st.session_state.inventory[fish]
+                st.session_state.inventory["coins"] = st.session_state.inventory.get("coins", 0) + total_coins
+                st.success(f"You sold your fish for {total_coins} coins!")
+            else:
+                st.error("You have no valuable fish to sell.")
+                
+    with col2:
+        if st.button("Buy Worms"):
+            buy_worms_dialog()
+            
+    with col3:
+        if st.button("Back to Village"):
+            st.session_state.location = "Village"
             st.rerun()
