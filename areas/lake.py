@@ -17,24 +17,26 @@ def show_lake():
     with col1:
         placeholder = st.empty()
         
-        # --- 1. IDLE: Heto yung simula ---
+        # Helper function to handle worm loss to keep code clean
+        def lose_worm():
+            if "Worms" in st.session_state.inventory:
+                st.session_state.inventory["Worms"] -= 1
+                if st.session_state.inventory["Worms"] <= 0:
+                    del st.session_state.inventory["Worms"]
+                save_game()
+
+        # --- 1. IDLE ---
         if st.session_state.fishing_step == "idle":
             if st.button("Start Fishing", key="start_fish"):
+                # Now we just CHECK for worms, but don't subtract them yet
                 if st.session_state.inventory.get("Worms", 0) > 0:
-                    st.session_state.inventory["Worms"] -= 1
-                    if st.session_state.inventory["Worms"] == 0:
-                        del st.session_state.inventory["Worms"]
-                    
                     st.session_state.fishing_step = "waiting"
                     st.session_state.splash_start_time = time.time()
-                    
-                    # Moved save_game BEFORE rerun so it actually saves the worm count
-                    save_game()
                     st.rerun()
                 else:
                     st.warning("Fishing without bait seems kinda silly.... you need Worms.")
 
-        # --- 2. WAITING: Habang nag-aabang ng kagat ---
+        # --- 2. WAITING ---
         elif st.session_state.fishing_step == "waiting":
             placeholder.info("Bubble... Bubble... Bubble...")
             elapsed = time.time() - st.session_state.splash_start_time
@@ -46,7 +48,7 @@ def show_lake():
                 time.sleep(0.1)
                 st.rerun()
 
-        # --- 3. FAKE SPLASH: Mapang-linlang na splash ---
+        # --- 3. FAKE SPLASH (Worm is safe here) ---
         elif st.session_state.fishing_step == "fake_splash":
             placeholder.warning("!!splash!!")
             if st.button("REEL IN!", key="reel_fake"):
@@ -72,34 +74,41 @@ def show_lake():
             
             if button_pressed:
                 catch_chance = random.randint(1, 400)
+                # Catch Logic
                 if catch_chance == 400: catch = "Rare Golden Fish"
                 elif catch_chance > 393: catch = "Huge Bass"
                 elif catch_chance > 386: catch = "Cat-fish"
                 elif catch_chance > 374: catch = "Bass"
-                elif catch_chance > 340: catch = "Trout"
-                elif catch_chance > 300: catch = "Perch"
-                elif catch_chance > 240: catch = "Carp"
+                elif catch_chance > 222: catch = "Trout"
+                elif catch_chance > 215: catch = "Perch"
+                elif catch_chance > 200: catch = "Carp"
                 else: catch = None
                 
                 st.session_state.current_fish = catch
                 
                 if st.session_state.current_fish:
+                    # FISH HOOKED: Consume the worm now
+                    lose_worm()
                     st.session_state.fishing_step = "battle_intro"
+                    
                     if st.session_state.current_fish in ["Trout", "Perch", "Carp"]: st.session_state.fish_hp = 10
                     elif st.session_state.current_fish in ["Bass", "Cat-fish", "Huge Bass"]: st.session_state.fish_hp = 15
                     elif st.session_state.current_fish == "Rare Golden Fish": st.session_state.fish_hp = 30
+                    
                     st.session_state.player_hp = 10
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
                 else:
+                    # KELP CAUGHT: Worm is safe!
                     st.error("You actually just caught a worthless kelp... you threw it away.")
                     st.session_state.fishing_step = "idle"
                     time.sleep(2)
                 st.rerun()
 
             elif elapsed >= 2:
+                # TOO LATE: The fish ate the worm and left
                 placeholder.warning("Too late! You lost the worm and the fish.")
+                lose_worm() # Worm consumed
                 st.session_state.fishing_step = "idle"
-                save_game()
                 time.sleep(2)
                 st.rerun()
             else:
@@ -117,7 +126,6 @@ def show_lake():
         elif st.session_state.fishing_step == "battle":
             st.subheader(f"Reeling in: {st.session_state.current_fish}")
             
-            # --- INSTRUCTIONS ADDED HERE ---
             st.markdown("""
             > **How to play:** The fish is trying to escape! 
             > Watch its movement and **pull in the opposite direction** to wear it down. 
@@ -138,6 +146,7 @@ def show_lake():
                 if st.session_state.fish_hp <= 0:
                     st.session_state.inventory[st.session_state.current_fish] = st.session_state.inventory.get(st.session_state.current_fish, 0) + 1
                     st.session_state.fishing_step = "won"
+                    save_game()
                 elif st.session_state.player_hp <= 0:
                     st.session_state.fishing_step = "lost"
                 else:
