@@ -9,13 +9,13 @@ def show_western_village():
     st.write("""
     You stand at the western edge of the village. To the north sits a sturdy blacksmith's shop,
     its forge smoke curling into the sky. The air smells of hot metal and coal.
-    To the west, a dirt path disappears into a dense forest – the frontier beyond the village.
+    Towards the west beyond the gate, a dirt path disappears into a dense forest – the frontier beyond the village.
     """)
 
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Enter the Blacksmith's"):  # placeholder behaviour
-            st.info("The blacksmith is closed for now. Come back later.")
+            st.info("The blacksmith is closed for now. Come back later(WIP).")
     with col2:
         if st.button("Head West to the Forest"):
             st.session_state.location = "Forest"
