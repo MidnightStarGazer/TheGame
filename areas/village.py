@@ -8,15 +8,11 @@ def show_village():
     st.image("https://via.placeholder.com/800x400.png?text=A+small+but+bustling+Village")
     
     st.write("""
-### The Heartbeat of Oakhaven
 You stand at the **Village Center**. The quiet solitude of the wild is replaced by a symphony of village life: the rhythmic hammer of a distant blacksmith, the laughter of children, and the rich aroma of baking bread and woodsmoke.
 
 The village breathes with a vibrant, relaxing energy—a sanctuary for those who wander.
 
-***
-
-### Points of Interest
-* **The Salty Scale:** To your left, a modest wooden shack stands weathered by time. A wooden placard, carved with rough and hurried strokes, hangs by a rusted chain: **"I BUY FISH."** The faint scent of brine and lake-water lingers here, marking it as a humble place of trade.
+* **To your left, a modest wooden shack stands weathered by time. A wooden placard, carved with rough and hurried strokes, hangs by a rusted chain: **"I BUY FISH."** The faint scent of brine and lake-water lingers here, marking it as a humble place of trade.
 * **The Great Hall:** Rising above the smaller cottages is a structure of sturdy stone and ancient oak. A magnificent, embroidered tapestry snaps in the wind, its golden thread gleaming with the words: **"Adventurer’s Guild Hall."** It stands as a beacon for those seeking glory—or just a steady job.
 
 ***
@@ -25,7 +21,7 @@ The village breathes with a vibrant, relaxing energy—a sanctuary for those who
     col1, col2, col3= st.columns(3)
     
     with col1:
-        if st.button("Go to Salty Scale"):
+        if st.button("Go to the Fishmonger's Shack"):
             st.session_state.location = "Fishmonger"
             save_game()
             st.rerun()
