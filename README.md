@@ -1,8 +1,12 @@
 Updates.. I guess
 
 Also the credentials in streamlit are:
+
+
 Username: ajtd
+
 Password: ajtd2
+
 
 I dont wanna make a data base yet.. naw
 
