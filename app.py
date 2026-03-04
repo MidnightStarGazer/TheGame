@@ -5,6 +5,7 @@ from areas.lake import show_lake
 from areas.village import show_village
 from areas.fishmonger import show_fishmonger
 from areas.guild import show_guild
+from utils.quest_tracker import display_quest_progress
 
 # --- INITIALIZATION ---
 init_session_state()
@@ -39,8 +40,8 @@ if st.session_state.logged_in:
 
     with st.sidebar:
         st.title("⚙️ Game Menu")
-        # Here is your new 3-option menu
-        menu_choice = st.radio("Navigation", ["Inventory", "Quit to Menu", "Logout"])
+        # Here is your new menu options
+        menu_choice = st.radio("Navigation", ["Inventory", "Quest Progress", "Quit to Menu", "Logout"])
         
         if menu_choice == "Inventory":
             st.subheader("🎒 Your Items")
@@ -53,6 +54,10 @@ if st.session_state.logged_in:
             if st.button("💾 Save Progress"):
                 save_game()
                 st.toast("Progress Saved!", icon="💾")
+
+        elif menu_choice == "Quest Progress":
+            st.subheader("📜 Quest Progress")
+            display_quest_progress()
 
         elif menu_choice == "Quit to Menu":
             st.warning("Return to the Start screen?")

@@ -9,7 +9,12 @@ def save_game():
     data = {
         "inventory": st.session_state.inventory,
         "location": st.session_state.location,
-        "game_started": st.session_state.game_started
+        "game_started": st.session_state.game_started,
+        "player_name": st.session_state.player_name,
+        "is_adventurer": st.session_state.is_adventurer,
+        "guild_step": st.session_state.guild_step,
+        "active_quest": st.session_state.active_quest,
+        "at_guild_counter": st.session_state.at_guild_counter,
     }
     with open(SAVE_FILE, "w") as f:
         json.dump(data, f)
@@ -39,7 +44,7 @@ def init_session_state():
     
     if "inventory" not in st.session_state: 
         # Give them 5 worms to start if it's a new game!
-        st.session_state.inventory = saved_data.get("inventory", {"Worms": 5}) 
+        st.session_state.inventory = saved_data.get("inventory", {"Worms": 0}) 
     
     if "location" not in st.session_state: 
         st.session_state.location = saved_data.get("location", "Plains")
@@ -57,3 +62,4 @@ def init_session_state():
     if "is_adventurer" not in st.session_state: st.session_state.is_adventurer = saved_data.get("is_adventurer", False)
     if "guild_step" not in st.session_state: st.session_state.guild_step = saved_data.get("guild_step", "intro")
     if "active_quest" not in st.session_state: st.session_state.active_quest = saved_data.get("active_quest", None)
+    if "at_guild_counter" not in st.session_state: st.session_state.at_guild_counter = saved_data.get("at_guild_counter", False)
