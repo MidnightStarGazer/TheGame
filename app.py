@@ -23,6 +23,20 @@ def login_dialog():
 # --- SIDEBAR ---
 if st.session_state.logged_in:
     with st.sidebar:
+        # The Badge is now the anchor! 
+        # If it's in the inventory, they are an adventurer.
+        has_badge = "Adventurer's Badge" in st.session_state.inventory
+
+        if has_badge:
+            st.markdown(f"<h2 style='text-align: center;'>🛡️ {st.session_state.player_name}</h2>", unsafe_allow_html=True)
+            st.caption("Rank: F Adventurer")
+        else:
+            st.markdown("<h2 style='text-align: center;'>🛡️ <b>???</b></h2>", unsafe_allow_html=True)
+            st.caption("Status: Unregistered")
+        
+        st.divider()
+        
+    with st.sidebar:
         st.title("⚙️ Game Menu")
         # Here is your new 3-option menu
         menu_choice = st.radio("Navigation", ["Inventory", "Quit to Menu", "Logout"])

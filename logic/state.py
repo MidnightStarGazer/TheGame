@@ -52,3 +52,8 @@ def init_session_state():
     if "fish_dir" not in st.session_state: st.session_state.fish_dir = "LEFT"
     if "splash_start_time" not in st.session_state: st.session_state.splash_start_time = 0
     if "move_start_time" not in st.session_state: st.session_state.move_start_time = 0
+    # For adventurer stuff
+    if "player_name" not in st.session_state: st.session_state.player_name = saved_data.get("player_name", "")
+    if "is_adventurer" not in st.session_state: st.session_state.is_adventurer = saved_data.get("is_adventurer", False)
+    if "guild_step" not in st.session_state: st.session_state.guild_step = saved_data.get("guild_step", "intro")
+    if "active_quest" not in st.session_state: st.session_state.active_quest = saved_data.get("active_quest", None)
