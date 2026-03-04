@@ -26,15 +26,14 @@ def login_dialog():
 # only show sidebar once the actual game has started
 if st.session_state.logged_in and st.session_state.game_started:
     with st.sidebar:
-        # The Badge is now the anchor! 
-        # If it's in the inventory, they are an adventurer.
+        # Show player name if available; badge indicates adventurer status
         has_badge = "Adventurer's Badge" in st.session_state.inventory
+        player_display = st.session_state.player_name or "???"
 
+        st.markdown(f"<h2 style='text-align: center;'>🛡️ {player_display}</h2>", unsafe_allow_html=True)
         if has_badge:
-            st.markdown(f"<h2 style='text-align: center;'>🛡️ {st.session_state.player_name}</h2>", unsafe_allow_html=True)
             st.caption("Rank: F Adventurer")
         else:
-            st.markdown("<h2 style='text-align: center;'>🛡️ <b>???</b></h2>", unsafe_allow_html=True)
             st.caption("Status: Unregistered")
         
         st.divider()
