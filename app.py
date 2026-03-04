@@ -4,6 +4,7 @@ from areas.plains import show_plains
 from areas.lake import show_lake
 from areas.village import show_village
 from areas.fishmonger import show_fishmonger
+from areas.guild import show_guild
 
 # --- INITIALIZATION ---
 init_session_state()
@@ -35,7 +36,7 @@ if st.session_state.logged_in:
             st.caption("Status: Unregistered")
         
         st.divider()
-        
+
     with st.sidebar:
         st.title("⚙️ Game Menu")
         # Here is your new 3-option menu
@@ -95,3 +96,5 @@ else:
         show_village()
     elif st.session_state.location == "Fishmonger": 
         show_fishmonger()
+    elif st.session_state.location == "Guild":
+        show_guild()
