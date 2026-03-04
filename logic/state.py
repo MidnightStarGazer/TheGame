@@ -15,6 +15,7 @@ def save_game():
         "guild_step": st.session_state.guild_step,
         "active_quest": st.session_state.active_quest,
         "at_guild_counter": st.session_state.at_guild_counter,
+        "at_quest_board": st.session_state.at_quest_board,
     }
     with open(SAVE_FILE, "w") as f:
         json.dump(data, f)
@@ -32,6 +33,7 @@ def reset_game():
     st.session_state.guild_step = "intro"
     st.session_state.active_quest = None
     st.session_state.at_guild_counter = False
+    st.session_state.at_quest_board = False
     st.rerun()
 
 def init_session_state():
@@ -71,3 +73,4 @@ def init_session_state():
     if "guild_step" not in st.session_state: st.session_state.guild_step = saved_data.get("guild_step", "intro")
     if "active_quest" not in st.session_state: st.session_state.active_quest = saved_data.get("active_quest", None)
     if "at_guild_counter" not in st.session_state: st.session_state.at_guild_counter = saved_data.get("at_guild_counter", False)
+    if "at_quest_board" not in st.session_state: st.session_state.at_quest_board = saved_data.get("at_quest_board", False)

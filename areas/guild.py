@@ -9,8 +9,8 @@ def show_guild():
     st.title("🏤 Adventurer's Guild")
     st.write("_The hall is filled with the clinking of armor and the low hum of experienced hunters discussing their next mark._")
 
-    # --- GUILD ENVIRONMENT (Not at counter) ---
-    if not st.session_state.at_guild_counter:
+    # --- GUILD ENVIRONMENT (Not at counter or quest board) ---
+    if not st.session_state.at_guild_counter and not st.session_state.at_quest_board:
         st.write("""
         You stand in the main hall of the guild. Adventurers of all ranks mill about, discussing their exploits. 
         At the far end of the hall, you see a counter with a woman behind it - likely the guild clerk.
@@ -18,20 +18,25 @@ def show_guild():
         Various quests are pinned to a board on the wall, and the atmosphere buzzes with activity.
         """)
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
             if st.button("🚶 Approach the Counter"):
                 st.session_state.at_guild_counter = True
                 save_game()
                 st.rerun()
-
         with col2:
+            if st.button("📜 Approach the Quest Board"):
+                st.session_state.at_quest_board = True
+                save_game()
+                st.rerun()
+
+        with col3:
             if st.button("Leave Building"):
                 st.session_state.location = "Village"
                 st.rerun()
 
     # --- AT THE COUNTER (Mira's Dialogue) ---
-    else:
+    elif st.session_state.at_guild_counter:
         with st.chat_message("assistant", avatar="👩‍💼"):
 
             # --- PHASE 1: Name Entry ---
@@ -90,7 +95,7 @@ def show_guild():
                 quest = get_active_quest()
 
                 if quest:
-                    st.write(f"Good luck with the **{quest['name']}**, **{st.session_state.player_name}**!")
+                    st.write(f"Mira: 'Good luck with the **{quest['name']}**, **{st.session_state.player_name}**!'")
                     st.write(f"_Mira smiles encouragingly._")
                     st.info("📱 Check your **Quest Progress** in the Game Menu sidebar to track your progress!")
 
@@ -110,22 +115,35 @@ def show_guild():
                             save_game()
                             st.rerun()
                 else:
-                    st.error("Wait... I don't see an active quest for you. Let's talk again.")
+                    st.error("Mira: 'Wait... I don't see an active quest for you. Let's talk again.'")
                     st.session_state.guild_step = "clerk_intro"
                     st.rerun()
 
-            # --- PHASE 5: Registered / Quest Board ---
+            # --- PHASE 5: Registered ---
             elif st.session_state.guild_step == "registered":
-                st.write(f"Welcome back, Adventurer **{st.session_state.player_name}**!")
-                st.write("Your **Adventurer's Badge** is your proof of membership. Keep it safe.")
-
-                st.divider()
-                st.subheader("📜 Quest Board")
-                st.write("The board is currently empty. Check back soon for new Rank F postings!(WIP)")
+                st.write(f"Mira: 'Welcome back, Adventurer **{st.session_state.player_name}**!'")
+                st.write("Mira: 'Your **Adventurer's Badge** is your proof of membership. Keep it safe.'")
+                st.write("Mira: 'Anyway, how can I help you?'")
 
         # Leave the counter button
         st.divider()
         if st.button("◀️ Leave the Counter"):
             st.session_state.at_guild_counter = False
+            save_game()
+            st.rerun()
+
+    # --- AT THE QUEST BOARD ---
+    elif st.session_state.at_quest_board:
+        st.subheader("📜 Quest Board")
+        st.write("""
+        You approach the large wooden board pinned to the wall. Various quest notices are posted here, 
+        ranging from simple tasks to challenging adventures. You scan through the notices...
+        """)
+
+        st.info("> *The Quest Board is currently empty. Perhaps check back later for new postings!*")
+
+        st.divider()
+        if st.button("◀️ Leave the Quest Board"):
+            st.session_state.at_quest_board = False
             save_game()
             st.rerun()
