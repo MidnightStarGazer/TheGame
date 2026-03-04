@@ -8,13 +8,18 @@ def show_plains():
     st.image("https://via.placeholder.com/800x400.png?text=Vast+Plains+Landscape") 
     
     st.write("""
-    You found yourself in the middle of a vast grassy field. You feel the wind blowing gently on your face, 
-    the nice feel of grass, and the gentle heat of the sun.
-    
-    You can also notice what seems to be a lake from afar towards the south of you.
-             
-    You also found a few rocks that seem to have wet soil around them. They might be hiding something useful.
-    """)
+   ### A Sea of Emerald
+You stand at the heart of an endless emerald ocean. The **Whispering Plains** stretch toward the horizon in every direction, the tall grass swaying in a synchronized dance as a gentle, cool breeze whistles past your ears. 
+
+The sun hangs heavy and golden in the sky, its warmth wrapping around you like a familiar blanket. You take a deep breath, and the air tastes of wild clover and sun-drenched earth. 
+
+***
+
+### Surroundings
+* **To the South:** The light catches a shimmering ribbon of blue in the distance—the **Great Lake** glimmers like a fallen sapphire, promising cool waters and a quiet place to think.
+* **At Your Feet:** You notice a cluster of ancient, moss-covered stones. The soil at their base is dark and damp, unnaturally cool despite the midday heat. 
+
+*Something stirs beneath the surface...*""")
 
     col1, col2, col3 = st.columns(3)
     

@@ -5,6 +5,8 @@ from areas.lake import show_lake
 from areas.village import show_village
 from areas.fishmonger import show_fishmonger
 from areas.guild import show_guild
+from areas.western_village import show_western_village
+from areas.forest import show_forest
 from utils.quest_tracker import display_quest_progress
 
 # --- INITIALIZATION ---
@@ -103,3 +105,7 @@ else:
         show_fishmonger()
     elif st.session_state.location == "Guild":
         show_guild()
+    elif st.session_state.location == "Western_Village_Gate":
+        show_western_village()
+    elif st.session_state.location == "Forest":
+        show_forest()

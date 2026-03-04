@@ -8,6 +8,8 @@ def show_village():
     st.image("https://via.placeholder.com/800x400.png?text=A+small+but+bustling+Village")
     
     st.write("""
+             
+    Youre currently at the village entrance.
     A lively village stretches out in front of you. There are people everywhere, and you notice a few interesting spots along the streets. 
     One of them is a small building with a crude sign that reads, "I BUY FISH."  
     
@@ -48,3 +50,14 @@ def show_village():
             st.session_state.location = "Plains"
             save_game()
             st.rerun()
+
+    st.divider()
+    st.write("""
+          Looking forward, your eyes follows the dirt road of the village
+          as it leads towards the western entrance of the village
+             """)
+    if st.button("Follow the road"):
+        st.session_state.location = "Western_Village_Gate"
+        save_game()
+        st.rerun()
+        
