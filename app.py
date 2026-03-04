@@ -8,6 +8,7 @@ from areas.guild import show_guild
 from areas.western_village import show_western_village
 from areas.forest import show_forest
 from utils.quest_tracker import display_quest_progress
+from utils.playerStats import display_character_status, show_weapon_selection, show_armor_selection
 
 # --- INITIALIZATION ---
 init_session_state()
@@ -37,13 +38,16 @@ if st.session_state.logged_in and st.session_state.game_started:
             st.caption("Rank: F Adventurer")
         else:
             st.caption("Status: Unregistered")
+
+            st.button("Open Status Panel") 
+            ######MLOOK HERE AAAAAAAAAA
         
         st.divider()
 
     with st.sidebar:
         st.title("⚙️ Game Menu")
         # Here is your new menu options
-        menu_choice = st.radio("Navigation", ["Inventory", "Quest Progress", "Quit to Menu", "Logout"])
+        menu_choice = st.radio("Navigation", ["Inventory", "Character Status", "Quest Progress", "Quit to Menu", "Logout"])
         
         if menu_choice == "Inventory":
             st.subheader("🎒 Your Items")
@@ -56,6 +60,15 @@ if st.session_state.logged_in and st.session_state.game_started:
             if st.button("💾 Save Progress"):
                 save_game()
                 st.toast("Progress Saved!", icon="💾")
+
+        elif menu_choice == "Character Status":
+            # Handle character status display and equipment selection
+            if st.session_state.selecting_weapon:
+                show_weapon_selection()
+            elif st.session_state.selecting_armor:
+                show_armor_selection()
+            else:
+                display_character_status()
 
         elif menu_choice == "Quest Progress":
             st.subheader("📜 Quest Progress")

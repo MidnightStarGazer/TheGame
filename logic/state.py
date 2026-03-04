@@ -16,6 +16,8 @@ def save_game():
         "active_quest": st.session_state.active_quest,
         "at_guild_counter": st.session_state.at_guild_counter,
         "at_quest_board": st.session_state.at_quest_board,
+        "equipped_weapon": st.session_state.equipped_weapon,
+        "equipped_armor": st.session_state.equipped_armor,
     }
     with open(SAVE_FILE, "w") as f:
         json.dump(data, f)
@@ -34,6 +36,8 @@ def reset_game():
     st.session_state.active_quest = None
     st.session_state.at_guild_counter = False
     st.session_state.at_quest_board = False
+    st.session_state.equipped_weapon = None
+    st.session_state.equipped_armor = None
     st.rerun()
 
 def init_session_state():
@@ -74,3 +78,9 @@ def init_session_state():
     if "active_quest" not in st.session_state: st.session_state.active_quest = saved_data.get("active_quest", None)
     if "at_guild_counter" not in st.session_state: st.session_state.at_guild_counter = saved_data.get("at_guild_counter", False)
     if "at_quest_board" not in st.session_state: st.session_state.at_quest_board = saved_data.get("at_quest_board", False)
+    if "equipped_weapon" not in st.session_state: st.session_state.equipped_weapon = saved_data.get("equipped_weapon", None)
+    if "equipped_armor" not in st.session_state: st.session_state.equipped_armor = saved_data.get("equipped_armor", None)
+    # UI state (not saved)
+    if "show_character_status" not in st.session_state: st.session_state.show_character_status = False
+    if "selecting_weapon" not in st.session_state: st.session_state.selecting_weapon = False
+    if "selecting_armor" not in st.session_state: st.session_state.selecting_armor = False

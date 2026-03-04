@@ -15,7 +15,6 @@ The air here is sharp and cool, carrying the pristine scent of fresh water and d
 * **The water is crystal clear, revealing a vibrant underwater world. Schools of silver-scaled fish dart through forests of swaying lake-grass, their movements synchronized and fluid.
 * **Further out, where the light fades into shadow, the water turns a mysterious, ink-black blue. Great ripples occasionally break the surface, hinting at the massive creatures that dwell in the silent depths.
 
-_You feel a profound sense of peace. In this corner of Arteka, time seems to slow down, leaving only you, your rod, and the infinite patience of the water._
 """)
     
     col1, col2 = st.columns(2)
