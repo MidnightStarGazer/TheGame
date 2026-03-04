@@ -100,7 +100,7 @@ def show_lake():
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
                 else:
                     # KELP CAUGHT: Worm is safe!
-                    st.error("You actually just caught a worthless kelp... you threw it away..You also lost your bait.")
+                    st.error("You actually just caught a worthless kelp so you threw it away..You also lost your bait.")
                     st.session_state.fishing_step = "idle"
                     lose_worm()
                     time.sleep(2)
