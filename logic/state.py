@@ -23,7 +23,15 @@ def reset_game():
     #Deletes the save file and clears session state for a fresh start."""
     if os.path.exists(SAVE_FILE):
         os.remove(SAVE_FILE)
-    # Clear session state and re-initialize with defaults
+    # Explicitly reset relevant state variables so the new game begins clean
+    st.session_state.inventory = {}
+    st.session_state.location = "Plains"
+    st.session_state.game_started = False
+    st.session_state.player_name = ""
+    st.session_state.is_adventurer = False
+    st.session_state.guild_step = "intro"
+    st.session_state.active_quest = None
+    st.session_state.at_guild_counter = False
     st.rerun()
 
 def init_session_state():
@@ -43,8 +51,8 @@ def init_session_state():
         st.session_state.game_started = saved_data.get("game_started", False)
     
     if "inventory" not in st.session_state: 
-        # Give them 5 worms to start if it's a new game!
-        st.session_state.inventory = saved_data.get("inventory", {"Worms": 0}) 
+        # fresh start: begin with no items
+        st.session_state.inventory = saved_data.get("inventory", {}) 
     
     if "location" not in st.session_state: 
         st.session_state.location = saved_data.get("location", "Plains")

@@ -23,7 +23,8 @@ def login_dialog():
             st.error("Incorrect credentials.")
 
 # --- SIDEBAR ---
-if st.session_state.logged_in:
+# only show sidebar once the actual game has started
+if st.session_state.logged_in and st.session_state.game_started:
     with st.sidebar:
         # The Badge is now the anchor! 
         # If it's in the inventory, they are an adventurer.
