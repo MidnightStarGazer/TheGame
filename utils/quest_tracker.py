@@ -79,8 +79,9 @@ def display_quest_progress(quest_id=None):
     # Quest Title
     st.subheader(f"📋 {progress['name']}")
     
-    # Quest Description
+    # Quest Description and Reward
     st.write(progress["description"])
+    st.write(f"**Reward:** {progress['reward']}")
     
     # Progress for each requirement
     st.write("**Progress:**")
