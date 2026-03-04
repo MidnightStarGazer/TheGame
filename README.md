@@ -7,6 +7,7 @@ Password: ajtd2
 I dont wanna make a data base yet.. naw
 
 ======================================
+
 New stuff:
 Player status menu
 more location
