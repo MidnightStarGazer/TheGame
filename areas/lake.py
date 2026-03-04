@@ -74,15 +74,16 @@ def show_lake():
             
             if button_pressed:
                 catch_chance = random.randint(1, 400)
-                # Catch Logic
-                if catch_chance == 400: catch = "Rare Golden Fish"
-                elif catch_chance > 393: catch = "Huge Bass"
-                elif catch_chance > 386: catch = "Cat-fish"
-                elif catch_chance > 374: catch = "Bass"
-                elif catch_chance > 222: catch = "Trout"
-                elif catch_chance > 215: catch = "Perch"
-                elif catch_chance > 200: catch = "Carp"
-                else: catch = None
+                # Catch Logic - Adjusted probabilities
+                if catch_chance == 400: catch = "Rare Golden Fish"  # 1/400 (0.25%)
+                elif catch_chance > 394: catch = "Huge Bass"  # 5/400 (1.25%)
+                elif catch_chance > 389: catch = "Cat-fish"  # 5/400 (1.25%)
+                elif catch_chance > 339: catch = "Bass"  # 50/400 (12.5%)
+                elif catch_chance > 239: catch = "Trout"  # 100/400 (25%)
+                elif catch_chance > 139: catch = "Perch"  # 100/400 (25%)
+                elif catch_chance > 39: catch = "Carp"  # 100/400 (25%)
+                else: catch = None  # 39/400 - Kelp
+
                 
                 st.session_state.current_fish = catch
                 
@@ -99,8 +100,9 @@ def show_lake():
                     st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
                 else:
                     # KELP CAUGHT: Worm is safe!
-                    st.error("You actually just caught a worthless kelp... you threw it away.")
+                    st.error("You actually just caught a worthless kelp... you threw it away..You also lost your bait.")
                     st.session_state.fishing_step = "idle"
+                    lose_worm()
                     time.sleep(2)
                 st.rerun()
 

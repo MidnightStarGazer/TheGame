@@ -2,14 +2,15 @@ import streamlit as st
 
 REGISTRATION_QUEST = {
     "id": "adventurer_badge",
-    "name": "The Trial: Fishing Basics",
+    "name": "Quest: Badge of Trust",
     "requirements": {
         "Trout": 5,
         "Carp": 5,
         "Perch": 5
     },
     "reward": "Adventurer's Badge", # The specific item reward
-    "description": "Catch 5 Trout, 5 Carp, and 5 Perch. Mira will trade them for your official badge."
+    "description": "Catch 5 Trout, 5 Carp, and 5 Perch.",
+    "Reward": "Official Adventurer's Badge."
 }
 
 def has_requirements(inventory):
