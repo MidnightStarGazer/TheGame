@@ -8,9 +8,21 @@ def show_lake():
     st.image("https://via.placeholder.com/800x400.png?text=Peaceful+Lakeside")
     
     st.write("""
-    You arrived at the lake. The air is filled with the crisp scent of water. 
-    The gentle ripples create a soothing melody. You see small fishes swimming around.
-    """)
+### The Sapphire Mirror
+As the tall grasses of the plains finally yield to smooth, sun-warmed stones, the world opens up into a breathtaking vista. Before you lies the **Great Lake**, a vast expanse of liquid sapphire that seems to breathe with the very rhythm of the earth.
+
+The air here is sharp and cool, carrying the pristine scent of fresh water and damp moss. The restless wind of the plains dies down here, replaced by the gentle, rhythmic lapping of ripples against the shore—a soothing melody that clears the mind of all worry.
+
+***
+
+### Observations
+* **The Shallows:** The water is crystal clear, revealing a vibrant underwater world. Schools of silver-scaled fish dart through forests of swaying lake-grass, their movements synchronized and fluid.
+* **The Deep Blue:** Further out, where the light fades into shadow, the water turns a mysterious, ink-black blue. Great ripples occasionally break the surface, hinting at the massive creatures that dwell in the silent depths.
+
+***
+
+_You feel a profound sense of peace. In this corner of Arteka, time seems to slow down, leaving only you, your rod, and the infinite patience of the water._
+""")
     
     col1, col2 = st.columns(2)
     
