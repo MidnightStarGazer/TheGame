@@ -12,8 +12,8 @@ You stand at the **Village Center**. The quiet solitude of the wild is replaced 
 
 The village breathes with a vibrant, relaxing energy—a sanctuary for those who wander.
 
-* **To your left, a modest wooden shack stands weathered by time. A wooden placard, carved with rough and hurried strokes, hangs by a rusted chain: **"I BUY FISH."** The faint scent of brine and lake-water lingers here, marking it as a humble place of trade.
-* **The Great Hall:** Rising above the smaller cottages is a structure of sturdy stone and ancient oak. A magnificent, embroidered tapestry snaps in the wind, its golden thread gleaming with the words: **"Adventurer’s Guild Hall."** It stands as a beacon for those seeking glory—or just a steady job.
+* **To your left**, a modest wooden shack stands weathered by time. A wooden placard, carved with rough and hurried strokes, hangs by a rusted chain: **"I BUY FISH."** The faint scent of brine and lake-water lingers here, marking it as a humble place of trade.
+* **The Great Hall:** Rising above the smaller cottages is a structure of sturdy stone and ancient oak. A magnificent, embroidered banner snaps in the wind, its golden thread gleaming with the words: **"Adventurer’s Guild Hall."** It stands as a beacon for those seeking glory—or just a steady job.
 
 ***
 """)

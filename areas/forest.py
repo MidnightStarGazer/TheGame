@@ -12,7 +12,7 @@ def show_forest():
     while the village is a comfortable distance to the east.
     """)
 
-    if st.button("Return to Western Village"):
+    if st.button("Return to the Village"):
         st.session_state.location = "Western_Village_Gate"
         save_game()
         st.rerun()

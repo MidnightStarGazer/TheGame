@@ -58,7 +58,7 @@ def get_armor_bonus(armor_name):
 
 def display_character_status():
     """Display character status with equipment management."""
-    st.subheader("⚔️ Character Status")
+    st.subheader(" ''''' ")
 
     # Character Name and HP
     col1, col2 = st.columns(2)
@@ -119,10 +119,6 @@ def display_character_status():
 
     st.divider()
 
-    # Back Button
-    if st.button("◀️ Back to Menu"):
-        st.session_state.show_character_status = False
-        st.rerun()
 
 
 def show_weapon_selection():

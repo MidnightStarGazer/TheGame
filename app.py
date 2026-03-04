@@ -13,6 +13,7 @@ from utils.playerStats import display_character_status, show_weapon_selection, s
 # --- INITIALIZATION ---
 init_session_state()
 
+
 # --- DIALOGS (Login) ---
 @st.dialog("Login to TheGame")
 def login_dialog():
@@ -38,16 +39,21 @@ if st.session_state.logged_in and st.session_state.game_started:
             st.caption("Rank: F Adventurer")
         else:
             st.caption("Status: Unregistered")
-        
-        st.divider()
 
         # Toggle between Menu and Character Stats
         if st.button("📊 Character Stats"):
-            st.session_state.show_character_stats = True
+            st.session_state.show_character_status = True
+            st.rerun()
+
+        st.divider()
+        
+        # Toggle back to menu from character stats
+        if st.button("⚙️ Back to Menu"):
+            st.session_state.show_character_status = False
             st.rerun()
 
     # --- CHARACTER STATS SIDEBAR ---
-    if st.session_state.show_character_stats:
+    if st.session_state.show_character_status:
         with st.sidebar:
             st.title("⚔️ Character Stats")
             
@@ -58,12 +64,11 @@ if st.session_state.logged_in and st.session_state.game_started:
                 show_armor_selection()
             else:
                 display_character_status()
-
+    
     # --- GAME MENU SIDEBAR ---
     else:
         with st.sidebar:
             st.title("⚙️ Game Menu")
-            # Here is your new menu options
             menu_choice = st.radio("Navigation", ["Inventory", "Quest Progress", "Quit to Menu", "Logout"])
             
             if menu_choice == "Inventory":
@@ -95,6 +100,7 @@ if st.session_state.logged_in and st.session_state.game_started:
                     st.session_state.logged_in = False
                     st.session_state.game_started = False 
                     st.rerun()
+
 
 # --- MAIN ROUTING LOGIC ---
 if not st.session_state.logged_in:
