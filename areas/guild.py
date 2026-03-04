@@ -66,27 +66,27 @@ def show_guild():
                 st.write("Great! But I can't just give a badge to anyone. You need to prove you have the basics down.")
                 st.write("A true adventurer in **Arteka** must be able to provide for themselves.")
 
-# Display current quest details (description + reward)
-            st.info(
-                f"**Quest:** {REGISTRATION_QUEST['name']}\n\n"
-                f"{REGISTRATION_QUEST['description']}\n\n"
-                f"**Reward:** {REGISTRATION_QUEST['reward']}"
-            )
-        st.write("Mira looks at you expectantly. 'So, do you accept?'")
+                # Display current quest details (description + reward)
+                st.info(
+                    f"**Quest:** {REGISTRATION_QUEST['name']}\n\n"
+                    f"{REGISTRATION_QUEST['description']}\n\n"
+                    f"**Reward:** {REGISTRATION_QUEST['reward']}"
+                )
+                st.write("Mira looks at you expectantly. 'So, do you accept?'")
 
-        q_col1, q_col2 = st.columns(2)
-        if q_col1.button("Accept Quest"):
-            st.session_state.guild_step = "on_quest"
-            st.session_state.active_quest = REGISTRATION_QUEST["id"]
-            save_game()
-            st.rerun()
+                q_col1, q_col2 = st.columns(2)
+                if q_col1.button("Accept Quest"):
+                    st.session_state.guild_step = "on_quest"
+                    st.session_state.active_quest = REGISTRATION_QUEST["id"]
+                    save_game()
+                    st.rerun()
 
-        if q_col2.button("Not now"):
-            st.session_state.guild_step = "clerk_intro"
-            st.rerun()
+                if q_col2.button("Not now"):
+                    st.session_state.guild_step = "clerk_intro"
+                    st.rerun()
 
             # --- PHASE 4: Quest Active Message ---
-        elif st.session_state.guild_step == "on_quest":
+            elif st.session_state.guild_step == "on_quest":
                 quest = get_active_quest()
 
                 if quest:
@@ -115,7 +115,7 @@ def show_guild():
                     st.rerun()
 
             # --- PHASE 5: Registered / Quest Board ---
-        elif st.session_state.guild_step == "registered":
+            elif st.session_state.guild_step == "registered":
                 st.write(f"Welcome back, Adventurer **{st.session_state.player_name}**!")
                 st.write("Your **Adventurer's Badge** is your proof of membership. Keep it safe.")
 
