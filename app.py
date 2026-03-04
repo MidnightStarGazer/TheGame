@@ -38,31 +38,20 @@ if st.session_state.logged_in and st.session_state.game_started:
             st.caption("Rank: F Adventurer")
         else:
             st.caption("Status: Unregistered")
-
-            st.button("Open Status Panel") 
-            ######MLOOK HERE AAAAAAAAAA
         
         st.divider()
 
-    with st.sidebar:
-        st.title("⚙️ Game Menu")
-        # Here is your new menu options
-        menu_choice = st.radio("Navigation", ["Inventory", "Character Status", "Quest Progress", "Quit to Menu", "Logout"])
-        
-        if menu_choice == "Inventory":
-            st.subheader("🎒 Your Items")
-            if not st.session_state.inventory:
-                st.write("Your inventory is empty.")
-            else:
-                for item, count in st.session_state.inventory.items():
-                    st.write(f"**{item}**: {count}")
-            
-            if st.button("💾 Save Progress"):
-                save_game()
-                st.toast("Progress Saved!", icon="💾")
+        # Toggle between Menu and Character Stats
+        if st.button("📊 Character Stats"):
+            st.session_state.show_character_stats = True
+            st.rerun()
 
-        elif menu_choice == "Character Status":
-            # Handle character status display and equipment selection
+    # --- CHARACTER STATS SIDEBAR ---
+    if st.session_state.show_character_stats:
+        with st.sidebar:
+            st.title("⚔️ Character Stats")
+            
+            # Handle weapon/armor selection or display stats
             if st.session_state.selecting_weapon:
                 show_weapon_selection()
             elif st.session_state.selecting_armor:
@@ -70,23 +59,42 @@ if st.session_state.logged_in and st.session_state.game_started:
             else:
                 display_character_status()
 
-        elif menu_choice == "Quest Progress":
-            st.subheader("📜 Quest Progress")
-            display_quest_progress()
+    # --- GAME MENU SIDEBAR ---
+    else:
+        with st.sidebar:
+            st.title("⚙️ Game Menu")
+            # Here is your new menu options
+            menu_choice = st.radio("Navigation", ["Inventory", "Quest Progress", "Quit to Menu", "Logout"])
+            
+            if menu_choice == "Inventory":
+                st.subheader("🎒 Your Items")
+                if not st.session_state.inventory:
+                    st.write("Your inventory is empty.")
+                else:
+                    for item, count in st.session_state.inventory.items():
+                        st.write(f"**{item}**: {count}")
+                
+                if st.button("💾 Save Progress"):
+                    save_game()
+                    st.toast("Progress Saved!", icon="💾")
 
-        elif menu_choice == "Quit to Menu":
-            st.warning("Return to the Start screen?")
-            if st.button("Confirm Quit"):
-                # This just toggles the screen, doesn't log you out
-                st.session_state.game_started = False 
-                st.rerun()
+            elif menu_choice == "Quest Progress":
+                st.subheader("📜 Quest Progress")
+                display_quest_progress()
 
-        elif menu_choice == "Logout":
-            st.error("This will take you back to the login screen.")
-            if st.button("Confirm Logout"):
-                st.session_state.logged_in = False
-                st.session_state.game_started = False 
-                st.rerun()
+            elif menu_choice == "Quit to Menu":
+                st.warning("Return to the Start screen?")
+                if st.button("Confirm Quit"):
+                    # This just toggles the screen, doesn't log you out
+                    st.session_state.game_started = False 
+                    st.rerun()
+
+            elif menu_choice == "Logout":
+                st.error("This will take you back to the login screen.")
+                if st.button("Confirm Logout"):
+                    st.session_state.logged_in = False
+                    st.session_state.game_started = False 
+                    st.rerun()
 
 # --- MAIN ROUTING LOGIC ---
 if not st.session_state.logged_in:
