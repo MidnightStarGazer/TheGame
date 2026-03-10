@@ -14,8 +14,11 @@ You stand at the heart of an endless emerald ocean. The **Whispering Plains** st
 The sun hangs heavy and golden in the sky, its warmth wrapping around you like a familiar blanket. You take a deep breath, and the air tastes of wild clover and sun-drenched earth. 
 
 You looked around...
+
 **To the South:** The light catches a shimmering ribbon of blue in the distance a Great Lake glimmers like a fallen sapphire.
+
 **At Your Feet:** You notice a cluster of ancient, moss-covered stones. The soil at their base is dark and damp, unnaturally cool despite the midday heat. 
+
 **To the West:** A dirt trail leads towards the distance, where you can just make out the outline of a small village. 
 
 """)
