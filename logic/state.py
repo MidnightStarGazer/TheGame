@@ -5,7 +5,7 @@ import os
 SAVE_FILE = "save_data.json"
 
 def save_game():
-    #Saves inventory, location, and game progress to a JSON file.(completely ai btw this entire saving feature)"""
+    #Saves inventory, location, and game progress to a JSON file.(completely ai btw this entire progress saving feature)"""
     data = {
         "inventory": st.session_state.inventory,
         "location": st.session_state.location,
@@ -73,6 +73,9 @@ def init_session_state():
     if "fish_dir" not in st.session_state: st.session_state.fish_dir = "LEFT"
     if "splash_start_time" not in st.session_state: st.session_state.splash_start_time = 0
     if "move_start_time" not in st.session_state: st.session_state.move_start_time = 0
+    
+    ###Beyond here are the stuff for navigation and area codes, and event codes
+    
     # For adventurer stuff
     if "player_name" not in st.session_state: st.session_state.player_name = saved_data.get("player_name", "")
     if "is_adventurer" not in st.session_state: st.session_state.is_adventurer = saved_data.get("is_adventurer", False)
