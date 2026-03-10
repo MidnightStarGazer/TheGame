@@ -50,6 +50,34 @@ def about_dialog():
     st.write("- **Visual Progress:** Quest progress bars and health metrics.")
     st.write("- **Narrative:** Dynamic text descriptions based on player location and actions.")
 
+    st.write("**Ui components**")
+    st.write("""
+    st.title: used for main headers for locations and menus 
+    *st.subheader: used for section headings like "Your Items", "Quest Progress", and "Equipment".
+    *st.write: used for storytelling, displaying item lists, and providing general game information throughout the app.
+    *st.markdown: used for styled flavor text, centered headers, and instructional blocks in the battle system.(can be seen in the instructions tutorial on fish battle)
+    *st.caption: used for secondary labels for item counts, rank status, and equipment details.
+    *st.divider: used for horizontal lines to separate UI sections in the sidebar and NPC menus.
+    *st.columns: used to organize buttons, stats, and requirements into side-by-side layouts.
+    *st.sidebar: used as the primary container for the game menu, navigation, and character status.
+    *st.button: used for all interactive choices, including movement, fishing, equipment management, and menu navigation.
+    *st.text_input: used for entering the player's name and login credentials.
+    *st.radio: used for the main navigation menu within the sidebar.
+    *st.success: used to signal positive outcomes like finding worms, catching fish, or completing quests.
+    *st.info: used for providing general guidance, NPC dialogue, and bubble cues during fishing.
+    *st.warning: used for cautionary feedback like missing bait, early reels, or quit confirmations.
+    *st.error: used for failure messages like line snaps, wrong login details, or having no fish to sell.
+    *st.toast: used for quick pop-up alerts during fishing battles and to confirm saving progress.
+    *st.spinner: used to show loading animations while "searching" rocks or "walking" between areas.
+    *st.balloons: used to trigger a celebration animation when the player completes the registration quest.(doesn't work properly in my phone tbh)
+    *st.progress: used to visualize the percentage of completion for quest requirements. (this are the bar in thw quest tracker)
+    *st.metric: used to display numerical HP values for both the player and fish during the fishing minigame.
+    *st.dialog: used for modal pop-up windows like the login screen and the "Buy Worms" menu.
+    *st.chat_message: used to create a dedicated character message block for Mira at the guild counter.
+    *st.empty: used as a dynamic placeholder for updating dialogue and fishing cues without a full page refresh.
+    """)
+ 
+
 
 # --- SIDEBAR ---
 # only show sidebar once the actual game has started
