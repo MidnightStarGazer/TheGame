@@ -105,7 +105,7 @@ You look towards the clear lake...
                     elif st.session_state.current_fish == "Rare Golden Fish": st.session_state.fish_hp = 30
                     
                     st.session_state.player_hp = 10
-                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "DIVING DOWN!"])
+                    st.session_state.fish_dir = random.choice(["LEFT!", "RIGHT!", "DIVING DOWN!"])
                 else:
                     # KELP CAUGHT: Worm is fucked!
                     st.error("You actually just caught a worthless kelp so you threw it away..You also lost your bait.")
