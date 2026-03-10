@@ -26,6 +26,31 @@ def login_dialog():
         else:
             st.error("Incorrect credentials.")
 
+@st.dialog("About The Game")
+def about_dialog():
+    st.subheader("What the app does (use-case)")
+    st.write("""
+    This application is a **Text-Based Adventure RPG** set in the world of Arteka. 
+    It provides an interactive UI flow where players can explore regions, manage 
+    character equipment, and engage in fishing minigames.
+    """)
+
+    st.subheader("Who the target user is")
+    st.write("""
+    The target users are **casual gamers** and fans of tabletop-style RPGs 
+    who enjoy narrative-driven browser experiences.
+    """)
+
+    st.subheader("Inputs and Outputs")
+    st.write("**Inputs:**")
+    st.write("- **Text Input:** Character naming and login credentials.")
+    st.write("- **Interactions:** Button clicks for navigation and real-time fishing battles.")
+    
+    st.write("**Outputs:**")
+    st.write("- **Visual Progress:** Quest progress bars and health metrics.")
+    st.write("- **Narrative:** Dynamic text descriptions based on player location.")
+
+
 # --- SIDEBAR ---
 # only show sidebar once the actual game has started
 if st.session_state.logged_in and st.session_state.game_started:
@@ -110,7 +135,7 @@ if not st.session_state.logged_in:
 
 elif not st.session_state.game_started:
     st.markdown("<h1 style='text-align: center;'>WELCOME TO THE GAME</h1>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("START GAME ->", use_container_width=True):
             st.session_state.game_started = True
@@ -119,6 +144,10 @@ elif not st.session_state.game_started:
         # This button now clears everything AND enters the game
         if st.button("NEW GAME", use_container_width=True, type="primary"):
             reset_game()
+    with col3:
+        #For about shit
+        if st.button("ℹ️ ABOUT", use_container_width=True):
+            about_dialog()
 
 else:
     # Navigation shit - checks where you are and shows that file
