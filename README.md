@@ -27,6 +27,7 @@ added minigame in fishing
 ======================================
 ***
 *PLANS*
+
 -More quest 
 
 -Functional Quest board 
