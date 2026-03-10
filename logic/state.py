@@ -5,7 +5,7 @@ import os
 SAVE_FILE = "save_data.json"
 
 def save_game():
-    #Saves inventory, location, and game progress to a JSON file."""
+    #Saves inventory, location, and game progress to a JSON file.(completely ai btw this entire saving feature)"""
     data = {
         "inventory": st.session_state.inventory,
         "location": st.session_state.location,
