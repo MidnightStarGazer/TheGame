@@ -12,8 +12,11 @@ As the tall grasses of the plains finally yield to smooth, sun-warmed stones, th
 
 The air here is sharp and cool, carrying the pristine scent of fresh water and damp moss. The restless wind of the plains dies down here, replaced by the gentle, rhythmic lapping of ripples against the shore—a soothing melody that clears the mind of all worry.
 
-* **The water is crystal clear**, revealing a vibrant underwater world. Schools of silver-scaled fish dart through forests of swaying lake-grass, their movements synchronized and fluid.
-* **Further out**, where the light fades into shadow, the water turns a mysterious, ink-black blue. Great ripples occasionally break the surface, hinting at the massive creatures that dwell in the silent depths.
+You look towards the clear lake...
+
+**The water is crystal clear**, revealing a vibrant underwater world. Schools of silver-scaled fish dart through forests of swaying lake-grass, their movements synchronized and fluid.
+
+**Further out**, where the light fades into shadow, the water turns a mysterious, ink-black blue. Great ripples occasionally break the surface, hinting at the massive creatures that dwell in the silent depths.
 
 """)
     
