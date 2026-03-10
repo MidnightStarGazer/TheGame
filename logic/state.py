@@ -86,4 +86,4 @@ def init_session_state():
     if "show_character_status" not in st.session_state: st.session_state.show_character_status = False
     if "selecting_weapon" not in st.session_state: st.session_state.selecting_weapon = False
     if "selecting_armor" not in st.session_state: st.session_state.selecting_armor = False
-        if "show_about" not in st.session_state: st.session_state.show_about = False
+    if "show_about" not in st.session_state: st.session_state.show_about = False
