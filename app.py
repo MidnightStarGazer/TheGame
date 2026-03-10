@@ -41,7 +41,7 @@ if st.session_state.logged_in and st.session_state.game_started:
             st.caption("Status: Unregistered")
 
         # Toggle between Menu and Character Stats
-        if st.button("📊 Character Stats"):
+        if st.button("Character Stats"):
             st.session_state.show_character_status = True
             st.rerun()
 
@@ -52,12 +52,12 @@ if st.session_state.logged_in and st.session_state.game_started:
             st.session_state.show_character_status = False
             st.rerun()
 
-    # --- CHARACTER STATS SIDEBAR ---
+    # --- CHARACTER STATS SIDEBAR THINGY---
     if st.session_state.show_character_status:
         with st.sidebar:
-            st.title("⚔️ Character Stats")
+            st.title("Character Stats")
             
-            # Handle weapon/armor selection or display stats
+            # This shit does weapon/armor selection or display stats
             if st.session_state.selecting_weapon:
                 show_weapon_selection()
             elif st.session_state.selecting_armor:
@@ -65,7 +65,7 @@ if st.session_state.logged_in and st.session_state.game_started:
             else:
                 display_character_status()
     
-    # --- GAME MENU SIDEBAR ---
+    # --- GAME MENU SIDEBAR THINGY ---
     else:
         with st.sidebar:
             st.title("⚙️ Game Menu")
@@ -116,12 +116,12 @@ elif not st.session_state.game_started:
             st.session_state.game_started = True
             st.rerun()
     with col2:
+        # This button now clears everything AND enters the game
         if st.button("NEW GAME", use_container_width=True, type="primary"):
-            # This is the heavy reset from your state.py
-            reset_game() 
+            reset_game()
 
 else:
-    # Navigation logic - checks where you are and shows that file
+    # Navigation shit - checks where you are and shows that file
     if st.session_state.location == "Plains": 
         show_plains()
     elif st.session_state.location == "Lake": 
