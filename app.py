@@ -30,15 +30,15 @@ def login_dialog():
 def about_dialog():
     st.subheader("What the app does (use-case)")
     st.write("""
-    This application is a **Text-Based Adventure RPG** set in the world of Arteka. 
-    It provides an interactive UI flow where players can explore regions, manage 
-    character equipment, and engage in fishing minigames.
+    This application is a work in progress **Text-Based Adventure RPG** set in the world of Arteka(wip). 
+    It provides an interactive UI flow where players can explore regions(wip), manage 
+    character equipment(wip), and engage in fishing minigames and more(wip).
     """)
 
     st.subheader("Who the target user is")
     st.write("""
-    The target users are **casual gamers** and fans of tabletop-style RPGs 
-    who enjoy narrative-driven browser experiences.
+    The target users are **casual gamers** and fans of tabletop-style text based RPGs 
+    who enjoy narrative-driven text base adventures experiences.
     """)
 
     st.subheader("Inputs and Outputs")
@@ -48,7 +48,7 @@ def about_dialog():
     
     st.write("**Outputs:**")
     st.write("- **Visual Progress:** Quest progress bars and health metrics.")
-    st.write("- **Narrative:** Dynamic text descriptions based on player location.")
+    st.write("- **Narrative:** Dynamic text descriptions based on player location and actions.")
 
 
 # --- SIDEBAR ---
