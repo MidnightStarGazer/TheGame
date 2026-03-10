@@ -29,7 +29,7 @@ def reset_game():
     # Explicitly reset relevant state variables so the new game begins clean
     st.session_state.inventory = {}
     st.session_state.location = "Plains"
-    st.session_state.game_started = False
+    st.session_state.game_started = True
     st.session_state.player_name = ""
     st.session_state.is_adventurer = False
     st.session_state.guild_step = "intro"
@@ -41,7 +41,9 @@ def reset_game():
     st.rerun()
 
 def init_session_state():
-    # --- 1. LOAD FROM FILE ---
+
+    
+    # --- 1. LOAD FROM FILE ((I have no idea how the code from below work tbh))---
     saved_data = {}
     if os.path.exists(SAVE_FILE):
         try:
