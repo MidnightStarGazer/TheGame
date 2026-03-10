@@ -25,7 +25,7 @@ You look towards the clear lake...
     with col1:
         placeholder = st.empty()
         
-        # Helper function to handle worm loss to keep code clean
+        # function to handle worm loss lol
         def lose_worm():
             if "Worms" in st.session_state.inventory:
                 st.session_state.inventory["Worms"] -= 1
@@ -82,7 +82,7 @@ You look towards the clear lake...
             
             if button_pressed:
                 catch_chance = random.randint(1, 400)
-                # Catch Logic - Adjusted probabilities
+                # Catch Logic - Adjusted probabilities [[Ask AI for help cuz matg]]
                 if catch_chance == 400: catch = "Rare Golden Fish"  # 1/400 (0.25%)
                 elif catch_chance > 394: catch = "Huge Bass"  # 5/400 (1.25%)
                 elif catch_chance > 389: catch = "Cat-fish"  # 5/400 (1.25%)
@@ -96,7 +96,7 @@ You look towards the clear lake...
                 st.session_state.current_fish = catch
                 
                 if st.session_state.current_fish:
-                    # FISH HOOKED: Consume the worm now
+                    # fish hooked: CONSUME the worm now
                     lose_worm()
                     st.session_state.fishing_step = "battle_intro"
                     
@@ -105,9 +105,9 @@ You look towards the clear lake...
                     elif st.session_state.current_fish == "Rare Golden Fish": st.session_state.fish_hp = 30
                     
                     st.session_state.player_hp = 10
-                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "UP"])
+                    st.session_state.fish_dir = random.choice(["LEFT", "RIGHT", "DIVING DOWN!"])
                 else:
-                    # KELP CAUGHT: Worm is safe!
+                    # KELP CAUGHT: Worm is fucked!
                     st.error("You actually just caught a worthless kelp so you threw it away..You also lost your bait.")
                     st.session_state.fishing_step = "idle"
                     lose_worm()
