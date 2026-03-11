@@ -55,7 +55,7 @@ def init_session_state():
     if "logged_in" not in st.session_state: st.session_state.logged_in = False
     
     if "game_started" not in st.session_state: 
-        st.session_state.game_started = saved_data.get("game_started", False)
+        st.session_state.game_started = False
     
     if "inventory" not in st.session_state: 
         # fresh start: begin with no items
