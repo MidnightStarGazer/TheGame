@@ -26,6 +26,7 @@ def login_dialog():
         else:
             st.error("Incorrect credentials.")
 
+#Dialogs For about
 @st.dialog("About The Game")
 def about_dialog():
     st.subheader("What the app does (use-case)")
@@ -77,6 +78,18 @@ def about_dialog():
     - st.empty: used as a dynamic placeholder for updating dialogue and fishing cues without a full page refresh.
     """)
  
+#Dialogs Tutorial
+@st.dialog("Game Hints")
+def hints_dialog():
+    st.subheader("What the app does (use-case)")
+    st.write("""
+    - At the spawn point(Plains), there's a rock, search it again and again maybe it'll help with the fishing.
+    - When fishing only watch out for the real !!SPLASH!! 
+    - When fighting to reel in the fish.. pull it to the opposite direction it's going.
+    - You can sell the fish at the village to the fishmonger
+    - Check the guild!! Maybe you'll meet someone interesting!
+    """)
+    
 
 
 # --- SIDEBAR ---
@@ -163,7 +176,7 @@ if not st.session_state.logged_in:
 
 elif not st.session_state.game_started:
     st.markdown("<h1 style='text-align: center;'>WELCOME TO THE GAME</h1>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         if st.button("START GAME ->", use_container_width=True):
             st.session_state.game_started = True
@@ -176,6 +189,10 @@ elif not st.session_state.game_started:
         #For about shit
         if st.button("ℹ️ ABOUT", use_container_width=True):
             about_dialog()
+    with col4:
+        #For hint
+        if st.button("☝️🤓 Hints/Guide!", use_container_width=True):
+            hints_dialog()
 
 else:
     # Navigation shit - checks where you are and shows that file
