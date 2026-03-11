@@ -9,7 +9,6 @@ def save_game():
     data = {
         "inventory": st.session_state.inventory,
         "location": st.session_state.location,
-        "game_started": st.session_state.game_started,
         "player_name": st.session_state.player_name,
         "is_adventurer": st.session_state.is_adventurer,
         "guild_step": st.session_state.guild_step,
