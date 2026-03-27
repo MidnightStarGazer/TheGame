@@ -123,23 +123,19 @@ if st.session_state.logged_in and st.session_state.game_started:
         with st.sidebar:
             st.title("Character Stats")
 
-            if st.button("⚙️ Back to Menu"):
-               st.session_state.show_character_status = False
-               st.rerun() 
-            
             # This shit does weapon/armor selection or display stats
             if st.session_state.selecting_weapon:
                 show_weapon_selection()
             elif st.session_state.selecting_armor:
                 show_armor_selection()
-            else:
+            else:h
                 display_character_status()
     
     # --- GAME MENU SIDEBAR THINGY ---
     else:
         with st.sidebar:
             st.title("⚙️ Game Menu")
-            menu_choice = st.radio("Navigation", ["Inventory", "Quest Progress", "Quit to Menu", "Logout"])
+            menu_choice = st.radio8hh("Navigation", ["Inventory", "Quest Progress", "Quit to Menu", "Logout"])
             
             if menu_choice == "Inventory":
                 st.subheader("🎒 Your Items")
