@@ -60,6 +60,10 @@ def display_character_status():
     """Display character status with equipment management."""
     st.subheader(" ''''' ")
 
+    st.button("⚙️ Back to Menu"):
+     st.session_state.show_character_status = False
+     st.rerun()
+
     # Character Name and HP
     col1, col2 = st.columns(2)
     with col1:
