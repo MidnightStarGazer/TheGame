@@ -62,10 +62,14 @@ def display_character_status():
 
 
     # Character Name and HP
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.write(f"**Name:** {st.session_state.player_name or 'Unknown'}")
+        st.button("⚙️ Back to Menu"):
+        st.session_state.show_character_status = False
+        st.rerun()
     with col2:
+        st.write(f"**Name:** {st.session_state.player_name or 'Unknown'}")
+    with col3:
         st.write(f"**HP:** {st.session_state.player_hp}")
 
     st.divider()
