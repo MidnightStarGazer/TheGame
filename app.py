@@ -122,6 +122,10 @@ if st.session_state.logged_in and st.session_state.game_started:
     if st.session_state.show_character_status:
         with st.sidebar:
             st.title("Character Stats")
+
+            if st.button("⚙️ Back to Menu"):
+            st.session_state.show_character_status = False
+            st.rerun() 
             
             # This shit does weapon/armor selection or display stats
             if st.session_state.selecting_weapon:
