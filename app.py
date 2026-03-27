@@ -17,8 +17,8 @@ init_session_state()
 # --- DIALOGS (Login) ---
 @st.dialog("Login to TheGame")
 def login_dialog():
-    username = st.text_input("Username(ajtd)")
-    password = st.text_input("Password(ajtd2)", type="password")
+    username = st.text_input("Username(its: ajtd)")
+    password = st.text_input("Password(it's: ajtd2)", type="password")
     if st.button("Submit"):
         if username == "ajtd" and password == "ajtd2":
             st.session_state.logged_in = True
